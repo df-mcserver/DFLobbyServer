@@ -1,0 +1,31 @@
+package uk.co.nikodem.Events.Players;
+
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.minestom.server.entity.Player;
+import net.minestom.server.event.GlobalEventHandler;
+import net.minestom.server.event.player.PlayerDisconnectEvent;
+import uk.co.nikodem.Events.EventHandler;
+import uk.co.nikodem.Main;
+import uk.co.nikodem.Proxy.PlayerSender;
+import uk.co.nikodem.Server.EditMode;
+
+public class PlayerDisconnecting implements EventHandler {
+    @Override
+    public void setup(GlobalEventHandler eventHandler) {
+        eventHandler.addListener(PlayerDisconnectEvent.class, event -> {
+            final Player player = event.getPlayer();
+
+            String msg = player.getUsername()+" has left the lobby";
+
+            for (Player plr : Main.container.getPlayers()) {
+                plr.sendMessage(Component.text(msg, NamedTextColor.YELLOW));
+            }
+
+            PlayerSender.removePlayerBeingSent(player);
+            EditMode.removePlayer(player);
+
+            Main.logger.log("Players", msg);
+        });
+    }
+}

@@ -1,0 +1,39 @@
+[connection]
+address = "0.0.0.0"
+port = 25565
+compression_threshold = 0
+# set whether the server should authenticate with mojang servers
+# required for proxy support
+online = false
+
+# settings for proxy connection
+# "proxy" can be one of the following
+# - "velocity" or "gate"
+#  -  connects to the velocity proxy.
+#  -  requires "secret" to be set.
+#  -  required "online" to be turned on in "connection"
+# - "none"
+#  -  no proxy.
+[proxy]
+proxy = "velocity"
+secret = ""
+
+[minigames.parkour]
+enabled = true
+respawn = {x = 86.5, y = 2.0, z = 53.5, yaw = 90.0, pitch = 0.0}
+
+[server]
+spawn = {x = 119.5, y = 2.0, z = 53.5}
+world = "worlds/world"
+
+    [[server.mobs]]
+    entity = "creeper"
+    name = "Creative"
+    position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
+    server = "creative"
+
+    [[server.mobs]]
+    entity = "zombie"
+    name = "SMP (Season 3)"
+    position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
+    server = "smp"

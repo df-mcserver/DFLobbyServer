@@ -1,0 +1,40 @@
+[connection]
+address = "0.0.0.0"
+port = 25565
+compression_threshold = 0
+# set whether the server should authenticate with mojang servers
+# required for proxy support
+online = true
+
+[admins]
+byUsername = ["put your username here :)"]
+
+# settings for proxy connection
+# "proxy" can be one of the following
+# - "velocity" or "gate"
+#  -  connects to the velocity proxy.
+#  -  requires "secret" to be set.
+#  -  required "online" to be turned on in "connection"
+# - "none"
+#  -  no proxy. default to standard mojang auth.
+[proxy]
+proxy = "none"
+secret = ""
+messagingChannel = "bungeecord:main"
+expectChannelResponse = false
+
+[minigames.parkour]
+enabled = false
+respawn = {x = 0.0, y = 0.0, z = 0.0, yaw = 0.0, pitch = 0.0}
+
+[server]
+spawn = {x = 0.0, y = 0.0, z = 0.0}
+world = "worlds/world"
+
+# npc example:
+#
+# [[server.mobs]]
+# entity = "creeper"
+# name = "Example"
+# position = {x = 0.0, y = 40.0, z = 0.0}
+# server = "example"
