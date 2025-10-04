@@ -11,6 +11,7 @@ import net.minestom.server.event.player.PlayerLoadedEvent;
 import net.minestom.server.event.player.PlayerSkinInitEvent;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Main;
+import uk.co.nikodem.Proxy.BungeecordAbstractions;
 
 public class PlayerJoining implements EventHandler {
     public void setup(GlobalEventHandler eventHandler) {
@@ -23,6 +24,13 @@ public class PlayerJoining implements EventHandler {
         });
         eventHandler.addListener(PlayerLoadedEvent.class, event -> {
             final Player player = event.getPlayer();
+
+            if (Main.config.connection.player_validation) {
+                System.out.println("Attempting to validate player..");
+                BungeecordAbstractions.sendIncompatibleClientMessage(player);
+                BungeecordAbstractions.sendRealProtocolVersionMessage(player);
+            }
+
             String msg = player.getUsername()+" has joined the lobby";
 
             for (Player plr : Main.container.getPlayers()) {

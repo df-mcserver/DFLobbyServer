@@ -5,9 +5,11 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
+import net.minestom.server.listener.common.PluginMessageListener;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Main;
 import uk.co.nikodem.Proxy.PlayerSender;
+import uk.co.nikodem.Proxy.PlayerValidation;
 import uk.co.nikodem.Utils.StringHelper;
 
 import java.util.List;
@@ -34,8 +36,6 @@ public class PluginMessage implements EventHandler {
         eventHandler.addListener(PlayerPluginMessageEvent.class, event -> {
             Player plr = event.getPlayer();
 
-//            System.out.println("Message from "+event.getIdentifier()+"\n"+event.getMessageString());
-
             switch (event.getIdentifier()) {
                 case "minecraft:register":
                     // velocity doesn't allow plugins to handle register messages
@@ -51,14 +51,14 @@ public class PluginMessage implements EventHandler {
 
                 default:
                     if (event.getIdentifier().equals(Main.config.proxy.messagingChannel)) {
-                        if (Main.config.proxy.expectChannelResponse) {
-                            String[] args = event.getMessageString().split(" ");
-                            String command = StringHelper.sanitiseString(args[0]);
+                        String[] args = event.getMessageString().split(" ");
+                        String command = StringHelper.sanitiseString(args[0]);
 
-                            switch (command) {
-                                // seems to work half the time on geyser
-                                // TODO: investigate
-                                case "ConnectStatus":
+                        switch (command) {
+                            // seems to work half the time on geyser
+                            // TODO: investigate
+                            case "ConnectStatus":
+                                if (Main.config.proxy.expectChannelResponse) {
                                     if (!PlayerSender.getIsBeingSent(plr)) break;
                                     String status = StringHelper.sanitiseString(args[1]);
                                     if (status.equals("false")) {
@@ -68,10 +68,34 @@ public class PluginMessage implements EventHandler {
                                         break;
                                     }
                                     Main.logger.log("Plugin", "Player \""+plr.getUsername()+"\" successfully teleported!");
+                                }
+                                break;
+
+                            case "RealProtocolVersion":
+                                String arg0rpv = StringHelper.sanitiseString(args[1]);
+                                int protocolVersion = 0;
+                                try {
+                                    protocolVersion = Integer.parseInt(arg0rpv);
+                                } catch (NumberFormatException e) {
+                                    PlayerValidation.getPlayerValidation(plr).markProtocolAsValidated(plr,false);
                                     break;
-                            }
-                        }
+                                }
+                                PlayerValidation.getPlayerValidation(plr).markProtocolAsValidated(plr,
+                                        Main.config.connection.minimum_protocol_version <= protocolVersion
+                                );
+                                break;
+
+                            case "IncompatibleClient":
+                                String arg0ic = StringHelper.sanitiseString(args[1]);
+                                boolean val = Boolean.parseBoolean(arg0ic);
+                                PlayerValidation.getPlayerValidation(plr).markIncompatibilityAsValidated(plr,
+                                        !val
+                                );
+                                break;
                     }
+
+                    break;
+                }
             }
         });
     }

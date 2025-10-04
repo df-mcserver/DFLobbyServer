@@ -2,12 +2,18 @@
 address = "0.0.0.0"
 port = 25565
 compression_threshold = 0
+# sets a protocol version where the player will be locked into the lobby
+# and only allowed to teleport to unrestricted servers
+# set to -1 to disable, requires player_validation to be enabled
+minimum_protocol_version = -1
+minimum_version_name = ""
+# checks the incompatibility of the client and the real protocol version
+# before the player is allowed to join other servers
+# requires df:proxy channel to be used (or DFProxyPlugin)
+player_validation = false
 # set whether the server should authenticate with mojang servers
 # required for proxy support
-online = true
-
-[admins]
-byUsername = ["put your username here :)"]
+online = false
 
 # settings for proxy connection
 # "proxy" can be one of the following
@@ -16,25 +22,28 @@ byUsername = ["put your username here :)"]
 #  -  requires "secret" to be set.
 #  -  required "online" to be turned on in "connection"
 # - "none"
-#  -  no proxy. default to standard mojang auth.
+#  -  no proxy.
 [proxy]
-proxy = "none"
+proxy = "velocity"
 secret = ""
-messagingChannel = "bungeecord:main"
-expectChannelResponse = false
 
 [minigames.parkour]
-enabled = false
-respawn = {x = 0.0, y = 0.0, z = 0.0, yaw = 0.0, pitch = 0.0}
+enabled = true
+respawn = {x = 86.5, y = 2.0, z = 53.5, yaw = 90.0, pitch = 0.0}
 
 [server]
-spawn = {x = 0.0, y = 0.0, z = 0.0}
+spawn = {x = 119.5, y = 2.0, z = 53.5}
 world = "worlds/world"
 
-# npc example:
-#
-# [[server.mobs]]
-# entity = "creeper"
-# name = "Example"
-# position = {x = 0.0, y = 40.0, z = 0.0}
-# server = "example"
+    [[server.mobs]]
+    entity = "creeper"
+    name = "Creative"
+    position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
+    server = "creative"
+    unrestricted = true
+
+    [[server.mobs]]
+    entity = "zombie"
+    name = "SMP (Season 3)"
+    position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
+    server = "smp"

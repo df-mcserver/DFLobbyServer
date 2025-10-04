@@ -19,6 +19,7 @@ public class PlayerSender {
     }
 
     public static void sendPlayer(Player plr, String server) {
+        if (Main.config.connection.player_validation && !PlayerValidation.playerIsValidated(plr)) return;
         if (getIsBeingSent(plr)) return;
         addPlayerBeingSent(plr);
         PlayerSender.informPlayer(plr, server);

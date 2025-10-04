@@ -2,6 +2,16 @@
 address = "0.0.0.0"
 port = 25565
 compression_threshold = 0
+# sets a protocol version where the player will be locked into the lobby
+# and only allowed to teleport to unrestricted servers
+# set to -1 to disable, requires player_validation to be enabled
+minimum_protocol_version = -1
+# the minimum version displayed to the client if they are under the minimum protocol version
+minimum_version_name = ""
+# checks the incompatibility of the client and the real protocol version
+# before the player is allowed to join other servers
+# requires df:proxy channel to be used (or DFProxyPlugin)
+player_validation = false
 # set whether the server should authenticate with mojang servers
 # required for proxy support
 online = false
@@ -31,6 +41,7 @@ world = "worlds/world"
     name = "Creative"
     position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
     server = "creative"
+    unrestricted = true
 
     [[server.mobs]]
     entity = "zombie"

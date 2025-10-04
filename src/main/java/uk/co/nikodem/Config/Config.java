@@ -97,6 +97,9 @@ public class Config {
             connection.port = parsedConfiguration.getLong("connection.port").intValue();
             connection.compression_threshold = parsedConfiguration.getLong("connection.compression_threshold").intValue();
             connection.online = parsedConfiguration.getBoolean("connection.online");
+            connection.player_validation = parsedConfiguration.getBoolean("connection.player_validation", false);
+            connection.minimum_protocol_version = parsedConfiguration.getLong("connection.minimum_protocol_version", 0L).intValue();
+            connection.minimum_version_name = parsedConfiguration.getString("connection.minimum_version_name");
 
             server.world = parsedConfiguration.getString("server.world", null);
             server.spawn = getCheckedPos(parsedConfiguration, "server.spawn", null);
@@ -119,8 +122,9 @@ public class Config {
                     Pos position = getCheckedPos(table, "position", new Pos(0, 0, 0));
                     String name = table.getString("name", null);
                     String servername = table.getString("server", null);
+                    boolean unrestricted = table.getBoolean("unrestricted", false);
 
-                    server.mobs.add(NPC.create(type, position, servername, name));
+                    server.mobs.add(NPC.create(type, position, servername, name, unrestricted));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }

@@ -8,6 +8,7 @@ import net.minestom.server.event.player.PlayerDisconnectEvent;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Main;
 import uk.co.nikodem.Proxy.PlayerSender;
+import uk.co.nikodem.Proxy.PlayerValidation;
 import uk.co.nikodem.Server.EditMode;
 
 public class PlayerDisconnecting implements EventHandler {
@@ -17,12 +18,16 @@ public class PlayerDisconnecting implements EventHandler {
             final Player player = event.getPlayer();
 
             String msg = player.getUsername()+" has left the lobby";
+            if (PlayerSender.getIsBeingSent(player)) {
+                msg = player.getUsername()+" has joined another server";
+                PlayerSender.removePlayerBeingSent(player);
+            }
 
             for (Player plr : Main.container.getPlayers()) {
                 plr.sendMessage(Component.text(msg, NamedTextColor.YELLOW));
             }
 
-            PlayerSender.removePlayerBeingSent(player);
+            PlayerValidation.removePlayerValidation(player);
             EditMode.removePlayer(player);
 
             Main.logger.log("Players", msg);
