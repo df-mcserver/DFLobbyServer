@@ -13,7 +13,7 @@ minimum_version_name = ""
 player_validation = false
 # set whether the server should authenticate with mojang servers
 # required for proxy support
-online = false
+online = true
 
 # settings for proxy connection
 # "proxy" can be one of the following
@@ -24,7 +24,7 @@ online = false
 # - "none"
 #  -  no proxy.
 [proxy]
-proxy = "velocity"
+proxy = "none"
 secret = ""
 
 [minigames.parkour]
@@ -35,15 +35,26 @@ respawn = {x = 86.5, y = 2.0, z = 53.5, yaw = 90.0, pitch = 0.0}
 spawn = {x = 119.5, y = 2.0, z = 53.5}
 world = "worlds/world"
 
-    [[server.mobs]]
-    entity = "creeper"
+    [[server.servers]]
     name = "Creative"
-    position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
     server = "creative"
     unrestricted = true
+#
+#    [[server.server]]
+#    entity = "creeper"
+#    name = "Creative"
+#    position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
+#    server = "creative"
+#    unrestricted = true
 
-    [[server.mobs]]
+    [[server.servers]]
     entity = "zombie"
-    name = "SMP (Season 3)"
+    name = "TestSMP"
     position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
-    server = "smp"
+    server = "testsmp"
+
+    [[server.servers]]
+    entity = "bamboo_raft"
+    name = ""
+    server = "testsmp"
+    position = {x = 102.0, y = 1.2, z = 55.0, yaw = 180.0}

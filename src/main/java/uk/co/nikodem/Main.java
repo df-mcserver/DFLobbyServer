@@ -7,7 +7,6 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.Scheduler;
-import org.slf4j.LoggerFactory;
 import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialiser;
@@ -31,7 +30,6 @@ public class Main {
     public static GameMode DEFAULT_GAMEMODE = GameMode.ADVENTURE;
 
     public static void main(String[] args) {
-
         // load configuration
         logger.log("Main", "Beginning execution!");
 

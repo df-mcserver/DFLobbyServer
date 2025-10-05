@@ -8,7 +8,7 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.item.Material;
 import uk.co.nikodem.Commands.World.EditWorldCommand;
-import uk.co.nikodem.Commands.NPCCommands;
+import uk.co.nikodem.Commands.ServerCommands;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
 import uk.co.nikodem.Commands.World.ExitEditWorldCommand;
 import uk.co.nikodem.Commands.World.SaveWorldCommand;
@@ -53,7 +53,7 @@ public class Initialiser {
     }
 
     public void setupCommands() {
-        MinecraftServer.getCommandManager().register(new NPCCommands());
+        MinecraftServer.getCommandManager().register(new ServerCommands());
 
         MinecraftServer.getCommandManager().register(new EditWorldCommand());
         MinecraftServer.getCommandManager().register(new ExitEditWorldCommand());

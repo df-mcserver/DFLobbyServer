@@ -6,7 +6,7 @@ import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import org.jspecify.annotations.Nullable;
 import uk.co.nikodem.Config.Sections.*;
-import uk.co.nikodem.Config.Types.NPC;
+import uk.co.nikodem.Config.Types.Server;
 import uk.co.nikodem.Main;
 
 import java.io.*;
@@ -20,7 +20,7 @@ public class Config {
 
     public Connection connection;
     public Proxy proxy;
-    public Server server;
+    public uk.co.nikodem.Config.Sections.Server server;
     public Minigames minigames;
     public Admins admins;
 
@@ -52,13 +52,21 @@ public class Config {
     }
 
     public Double getCheckedDouble(Toml config, String key, Double defaultValue) {
-        Double val = config.getDouble(key);
-        return val == null ? defaultValue : val;
+        try {
+            Double val = config.getDouble(key);
+            return val == null ? defaultValue : val;
+        } catch (NullPointerException e) {
+            return defaultValue;
+        }
     }
 
     public Float getCheckedFloat(Toml config, String key, Float defaultValue) {
-        Double val = config.getDouble(key);
-        return val == null ? defaultValue : val.floatValue();
+        try {
+            Double val = config.getDouble(key);
+            return val == null ? defaultValue : val.floatValue();
+        } catch (NullPointerException e) {
+            return defaultValue;
+        }
     }
 
     public Pos getCheckedPos(Toml config, String key, @Nullable Pos defaultValue) {
@@ -83,7 +91,7 @@ public class Config {
 
             if (this.proxy == null) this.proxy = new Proxy();
             if (this.connection == null) this.connection = new Connection();
-            if (this.server == null) this.server = new Server();
+            if (this.server == null) this.server = new uk.co.nikodem.Config.Sections.Server();
             if (this.minigames == null) this.minigames = new Minigames();
             if (this.admins == null) this.admins = new Admins();
 
@@ -109,22 +117,25 @@ public class Config {
 
             admins.byUsername = parsedConfiguration.getList("admins.byUsername", new ArrayList<>());
 
-            List<Object> mobArray = parsedConfiguration.getList("server.mobs", new ArrayList<>());
+            List<Object> serverArray = parsedConfiguration.getList("server.servers", new ArrayList<>());
             int i = -1;
-            for (Object obj : mobArray) {
+            for (Object obj : serverArray) {
                 i++;
-                Toml table = parsedConfiguration.getTable("server.mobs["+i+"]");
+                Toml table = parsedConfiguration.getTable("server.servers["+i+"]");
                 if (table == null) continue;
                 if (table.isEmpty()) continue;
 
                 try {
-                    EntityType type = EntityType.fromKey(table.getString("entity", "zombie"));
-                    Pos position = getCheckedPos(table, "position", new Pos(0, 0, 0));
+                    String entityTypeName = table.getString("entity", null);
+                    EntityType type = entityTypeName == null ? null : EntityType.fromKey(entityTypeName);
+                    Pos position = getCheckedPos(table, "position", null);
                     String name = table.getString("name", null);
                     String servername = table.getString("server", null);
                     boolean unrestricted = table.getBoolean("unrestricted", false);
 
-                    server.mobs.add(NPC.create(type, position, servername, name, unrestricted));
+                    Main.logger.log("Servers", "Added server \""+name+"\"!");
+
+                    server.servers.add(Server.create(type, position, servername, name, unrestricted));
                 } catch (NullPointerException e) {
                     e.printStackTrace();
                 }
