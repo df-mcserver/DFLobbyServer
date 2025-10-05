@@ -5,13 +5,15 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
-import net.minestom.server.listener.common.PluginMessageListener;
 import uk.co.nikodem.Events.EventHandler;
+import uk.co.nikodem.Events.Plugins.MessageReceivers.ConnectStatus;
+import uk.co.nikodem.Events.Plugins.MessageReceivers.IncompatibleClient;
+import uk.co.nikodem.Events.Plugins.MessageReceivers.IsGeyser;
+import uk.co.nikodem.Events.Plugins.MessageReceivers.RealProtocolVersion;
 import uk.co.nikodem.Main;
-import uk.co.nikodem.Proxy.PlayerSender;
-import uk.co.nikodem.Proxy.PlayerValidation;
 import uk.co.nikodem.Utils.StringHelper;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PluginMessage implements EventHandler {
@@ -31,70 +33,35 @@ public class PluginMessage implements EventHandler {
                     ).split(":")
             );
 
+    public final HashMap<String, DFMessageReceiver> receivers = new HashMap<>();
+
+    public PluginMessage() {
+        receivers.put("ConnectStatus", new ConnectStatus());
+        receivers.put("IncompatibleClient", new IncompatibleClient());
+        receivers.put("IsGeyser", new IsGeyser());
+        receivers.put("RealProtocolVersion", new RealProtocolVersion());
+    }
+
     @Override
     public void setup(GlobalEventHandler eventHandler) {
         eventHandler.addListener(PlayerPluginMessageEvent.class, event -> {
             Player plr = event.getPlayer();
 
-            switch (event.getIdentifier()) {
-                case "minecraft:register":
-                    // velocity doesn't allow plugins to handle register messages
-                    // so I am forced to do it in the lobby instead
-                    // only works for fabric (+ their derivatives) and neoforge afaik
-                    if (playerContainsBadMod(event)) illegalStateErrorPlayer(plr);
-                    break;
+            if (event.getIdentifier().equals("minecraft:register")) {
+                // velocity doesn't allow plugins to handle register messages
+                // so I am forced to do it in the lobby instead
+                // only works for fabric (+ their derivatives) and neoforge afaik
+                if (playerContainsBadMod(event)) illegalStateErrorPlayer(plr);
+            } else if (event.getIdentifier().equals("pl3xmap:server_server_data")) {
+                // banned mod plugin message identifier
+                illegalStateErrorPlayer(plr);
+            } else if (event.getIdentifier().equals(Main.config.proxy.messagingChannel)) {
+                String[] args = event.getMessageString().split(" ");
+                String command = StringHelper.sanitiseString(args[0]);
 
-                case "pl3xmap:server_server_data":
-                    // banned mod plugin message identifier
-                    illegalStateErrorPlayer(plr);
-                    break;
-
-                default:
-                    if (event.getIdentifier().equals(Main.config.proxy.messagingChannel)) {
-                        String[] args = event.getMessageString().split(" ");
-                        String command = StringHelper.sanitiseString(args[0]);
-
-                        switch (command) {
-                            // seems to work half the time on geyser
-                            // TODO: investigate
-                            case "ConnectStatus":
-                                if (Main.config.proxy.expectChannelResponse) {
-                                    if (!PlayerSender.getIsBeingSent(plr)) break;
-                                    String status = StringHelper.sanitiseString(args[1]);
-                                    if (status.equals("false")) {
-                                        PlayerSender.informPlayerError(plr);
-                                        PlayerSender.removePlayerBeingSent(plr);
-                                        Main.logger.warn("Plugin", "Player \""+plr.getUsername()+"\" failed to teleport!");
-                                        break;
-                                    }
-                                    Main.logger.log("Plugin", "Player \""+plr.getUsername()+"\" successfully teleported!");
-                                }
-                                break;
-
-                            case "RealProtocolVersion":
-                                String arg0rpv = StringHelper.sanitiseString(args[1]);
-                                int protocolVersion = 0;
-                                try {
-                                    protocolVersion = Integer.parseInt(arg0rpv);
-                                } catch (NumberFormatException e) {
-                                    PlayerValidation.getPlayerValidation(plr).markProtocolAsValidated(plr,false);
-                                    break;
-                                }
-                                PlayerValidation.getPlayerValidation(plr).markProtocolAsValidated(plr,
-                                        Main.config.connection.minimum_protocol_version <= protocolVersion
-                                );
-                                break;
-
-                            case "IncompatibleClient":
-                                String arg0ic = StringHelper.sanitiseString(args[1]);
-                                boolean val = Boolean.parseBoolean(arg0ic);
-                                PlayerValidation.getPlayerValidation(plr).markIncompatibilityAsValidated(plr,
-                                        !val
-                                );
-                                break;
-                    }
-
-                    break;
+                DFMessageReceiver receiver = receivers.get(command);
+                if (receiver != null) {
+                    receiver.run(event, args);
                 }
             }
         });

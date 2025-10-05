@@ -23,4 +23,10 @@ public class BungeecordAbstractions {
             buffer.write(NetworkBuffer.STRING_IO_UTF8, "IncompatibleClient");
         }));
     }
+
+    public static void sendIsGeyserMessage(Player plr) {
+        plr.sendPluginMessage(Main.config.proxy.messagingChannel, NetworkBuffer.makeArray(buffer -> {
+            buffer.write(NetworkBuffer.STRING_IO_UTF8, "IsGeyser");
+        }));
+    }
 }
