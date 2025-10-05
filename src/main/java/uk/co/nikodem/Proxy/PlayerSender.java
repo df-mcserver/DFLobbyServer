@@ -18,8 +18,11 @@ public class PlayerSender {
         return playersBeingSent.contains(plr.getUuid());
     }
 
-    public static void sendPlayer(Player plr, String server) {
-        if (Main.config.connection.player_validation && !PlayerValidation.playerIsValidated(plr)) return;
+    public static void sendPlayer(Player plr, String server, boolean ignoreValidation) {
+        if (Main.config.connection.player_validation && !PlayerValidation.playerIsValidated(plr) && !ignoreValidation) {
+            informPlayerInvalidError(plr);
+            return;
+        }
         if (getIsBeingSent(plr)) return;
         addPlayerBeingSent(plr);
         PlayerSender.informPlayer(plr, server);
@@ -33,6 +36,10 @@ public class PlayerSender {
                     }
                 },
                 TaskSchedule.seconds(5), TaskSchedule.stop(), ExecutionType.TICK_END);
+    }
+
+    public static void sendPlayer(Player plr, String server) {
+        sendPlayer(plr, server, false);
     }
 
     public static void addPlayerBeingSent(Player plr) {
@@ -56,5 +63,9 @@ public class PlayerSender {
 
     public static void informPlayerTimeoutError(Player plr) {
         plr.sendMessage(Component.text("Request timed out!", NamedTextColor.RED));
+    }
+
+    public static void informPlayerInvalidError(Player plr) {
+        plr.sendMessage(Component.text("Your client is not validated!", NamedTextColor.RED));
     }
 }
