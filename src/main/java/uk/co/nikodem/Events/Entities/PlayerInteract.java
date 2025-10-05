@@ -41,7 +41,7 @@ public class PlayerInteract implements EventHandler {
         if (aliveNPC == null) return;
         if (PlayerSender.getIsBeingSent(plr)) return;
 
-        PlayerSender.sendPlayer(plr, aliveNPC.npcinfo.server);
+        PlayerSender.sendPlayer(plr, aliveNPC.npcinfo.server, aliveNPC.npcinfo.unrestricted);
 
         Main.logger.log("Entities", plr.getUsername()+" interacted with NPC for \""+aliveNPC.npcinfo.server+"\"!");
     }
