@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.GameMode;
 import net.minestom.server.entity.Player;
 import uk.co.nikodem.Main;
+import uk.co.nikodem.Proxy.PlayerValidation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class EditMode {
     public static List<UUID> editModePlayers = new ArrayList<>();
 
     public static boolean canEnterEditMode(Player plr) {
-        return Main.config.isPlayerAnAdmin(plr);
+        return Main.config.isPlayerAnAdmin(plr) && (!Main.config.connection.player_validation || PlayerValidation.playerIsValidated(plr));
     }
 
     public static boolean isInEditMode(Player plr) {
