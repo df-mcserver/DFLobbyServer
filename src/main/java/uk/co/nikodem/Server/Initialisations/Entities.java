@@ -15,6 +15,7 @@ public class Entities {
             if (server.entity == null) continue;
             Entity entity = new Entity(server.entity);
             if (!Objects.equals(server.name, "")) entity.setCustomName(Component.text(server.name));
+            entity.setNoGravity(true);
             entity.setInstance(container, server.position);
             entity.setCustomNameVisible(!Objects.equals(server.name, ""));
 
