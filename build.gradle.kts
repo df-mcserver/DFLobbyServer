@@ -7,6 +7,7 @@ group = "uk.co.nikodem"
 version = "1.0-SNAPSHOT"
 
 repositories {
+    maven { url = uri("https://jitpack.io") }
     mavenCentral()
 }
 
@@ -16,6 +17,7 @@ dependencies {
 //    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
     implementation("net.minestom:minestom:2025.08.18-1.21.8")
     implementation("com.moandjiezana.toml:toml4j:0.7.2")
+    implementation("com.github.TogAr2:MinestomPvP:56a831b41c")
 }
 
 java {
@@ -38,7 +40,3 @@ tasks {
         archiveClassifier.set("") // Prevent the -all suffix on the shadowjar file.
     }
 }
-
-//tasks.test {
-//    useJUnitPlatform()
-//}

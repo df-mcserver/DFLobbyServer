@@ -32,7 +32,7 @@ public class EditMode {
 
     public static void saveWorld(Player plr) {
         Main.logger.log("Edit", "World is being saved by "+plr.getUsername()+"!");
-        Main.container.saveChunksToStorage();
+        plr.getInstance().saveChunksToStorage();
         plr.sendMessage(Component.text("Successfully saved world!", NamedTextColor.LIGHT_PURPLE));
     }
 

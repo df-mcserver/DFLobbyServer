@@ -24,11 +24,24 @@ public class PlayerJoining implements EventHandler {
             player.setRespawnPoint(Main.config.server.spawn);
             player.setGameMode(Main.DEFAULT_GAMEMODE);
             Main.logger.log("Players", player.getUsername()+" is connecting to the server...");
+
+            String msg = player.getUsername()+" has joined the lobby";
+
+            for (Player plr : Main.container.getPlayers()) {
+                plr.sendMessage(Component.text(msg, NamedTextColor.YELLOW));
+            }
+
+            Main.logger.log("Players", msg);
         });
         eventHandler.addListener(PlayerLoadedEvent.class, event -> {
             Player player = event.getPlayer();
 
+            for (AdvancementTab tab : Main.advancementManager.getTabs()) {
+                tab.addViewer(player);
+            }
+
             if (Main.config.connection.player_validation) {
+                if (PlayerValidation.playerIsValidated(player)) return;
                 Main.logger.log("Players", "Attempting to validate "+player.getUsername());
                 BungeecordAbstractions.sendIncompatibleClientMessage(player);
                 BungeecordAbstractions.sendRealProtocolVersionMessage(player);
@@ -42,18 +55,6 @@ public class PlayerJoining implements EventHandler {
                         },
                         TaskSchedule.seconds(5), TaskSchedule.stop(), ExecutionType.TICK_END);
             }
-
-            String msg = player.getUsername()+" has joined the lobby";
-
-            for (Player plr : Main.container.getPlayers()) {
-                plr.sendMessage(Component.text(msg, NamedTextColor.YELLOW));
-            }
-
-            for (AdvancementTab tab : Main.advancementManager.getTabs()) {
-                tab.addViewer(player);
-            }
-
-            Main.logger.log("Players", msg);
         });
         eventHandler.addListener(PlayerSkinInitEvent.class, event -> {
             PlayerSkin skin = event.getSkin();

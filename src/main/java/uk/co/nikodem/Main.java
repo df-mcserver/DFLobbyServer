@@ -18,11 +18,15 @@ public class Main {
     public static Config config = new Config();
 
     public static MinecraftServer server;
-    public static InstanceContainer container;
-    public static GlobalEventHandler eventHandler;
 
+    public static InstanceContainer container;
     public static Generation generation;
     public static Entities entities;
+
+    public static InstanceContainer nether_container;
+    public static Generation nether_generation;
+
+    public static GlobalEventHandler eventHandler;
 
     public static AdvancementManager advancementManager;
     public static Scheduler scheduler;

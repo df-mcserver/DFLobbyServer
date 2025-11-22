@@ -23,6 +23,7 @@ public class Config {
     public uk.co.nikodem.Config.Sections.Server server;
     public Minigames minigames;
     public Admins admins;
+    public Nether nether;
 
     public boolean getExists() {
         Path source;
@@ -94,6 +95,7 @@ public class Config {
             if (this.server == null) this.server = new uk.co.nikodem.Config.Sections.Server();
             if (this.minigames == null) this.minigames = new Minigames();
             if (this.admins == null) this.admins = new Admins();
+            if (this.nether == null) this.nether = new Nether();
 
             // probably a better way to do this
             proxy.proxy = parsedConfiguration.getString("proxy.proxy");
@@ -116,6 +118,11 @@ public class Config {
             minigames.parkour.enabled = parsedConfiguration.getBoolean("minigames.parkour.enabled", false);
 
             admins.byUsername = parsedConfiguration.getList("admins.byUsername", new ArrayList<>());
+
+            nether.enabled = parsedConfiguration.getBoolean("nether.enabled");
+            nether.spawnLocation = getCheckedPos(parsedConfiguration, "nether.spawn_location", new Pos(0, 0, 0));
+            nether.portalLocation = getCheckedPos(parsedConfiguration, "nether.portal_location", new Pos(0, 0, 0));
+            nether.world = parsedConfiguration.getString("nether.world");
 
             List<Object> serverArray = parsedConfiguration.getList("server.servers", new ArrayList<>());
             int i = -1;

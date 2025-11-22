@@ -1,12 +1,18 @@
 package uk.co.nikodem.Server;
 
+import io.github.togar2.pvp.MinestomPvP;
+import io.github.togar2.pvp.feature.CombatFeatureSet;
+import io.github.togar2.pvp.feature.CombatFeatures;
+import io.github.togar2.pvp.utils.CombatVersion;
 import net.kyori.adventure.text.Component;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.*;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
+import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.world.DimensionType;
 import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.ServerCommands;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
@@ -26,11 +32,13 @@ public class Initialiser {
     public void Initialise() {
         setServerVariables();
 
-        InstanceContainer container = setupInstanceContainer();
-        GlobalEventHandler globalEventHandler = setupGlobalEventHandler();
+        InstanceManager manager = MinecraftServer.getInstanceManager();
+        InstanceContainer lobby_container = setupInstanceContainer(manager);
+        Main.container = lobby_container;
+        Main.generation = setupGeneration(lobby_container, config.server.world);
+        setupEntities(lobby_container);
 
-        setupGeneration(container);
-        setupEntities(container);
+        GlobalEventHandler globalEventHandler = setupGlobalEventHandler();
 
         collectivelySetupEventHandlers(globalEventHandler);
         setupCommands();
@@ -38,6 +46,11 @@ public class Initialiser {
         setupScheduler();
 
         addEasterEggAdvancement();
+
+        InstanceContainer nether_container = setupNether(manager);
+        Main.nether_container = nether_container;
+        nether_generation = setupGeneration(nether_container, config.nether.world);
+        setupPVP(globalEventHandler);
 
         startServer();
     }
@@ -50,6 +63,8 @@ public class Initialiser {
         setupEventHandler(eventHandler, new PlayerInLava());
         setupEventHandler(eventHandler, new PluginMessage());
         setupEventHandler(eventHandler, new PlayerPickBlock());
+        setupEventHandler(eventHandler, new PlayerMoving());
+        setupEventHandler(eventHandler, new PlayerCombat());
     }
 
     public void setupCommands() {
@@ -63,23 +78,16 @@ public class Initialiser {
     }
 
     public void setServerVariables() {
-        MinecraftServer.setBrandName("DF//Minestom");
+        MinecraftServer.setBrandName("DFLobbyServer");
         MinecraftServer.setCompressionThreshold(Main.config.connection.compression_threshold);
     }
 
-    public InstanceContainer setupInstanceContainer() {
-        InstanceManager instanceManager = MinecraftServer.getInstanceManager();
-        InstanceContainer container = instanceManager.createInstanceContainer();
-        Main.container = container;
-
-        return container;
+    public InstanceContainer setupInstanceContainer(InstanceManager manager) {
+        return manager.createInstanceContainer(DimensionType.OVERWORLD);
     }
 
     public GlobalEventHandler setupGlobalEventHandler() {
-        GlobalEventHandler globalEventHandler = MinecraftServer.getGlobalEventHandler();
-        Main.eventHandler = globalEventHandler;
-
-        return globalEventHandler;
+        return MinecraftServer.getGlobalEventHandler();
     }
 
     public void startServer() {
@@ -95,10 +103,10 @@ public class Initialiser {
         }
     }
 
-    public void setupGeneration(InstanceContainer container) {
+    public Generation setupGeneration(InstanceContainer container, String world_name) {
         Generation generation = new Generation();
-        generation.setupChunkGeneration(container);
-        Main.generation = generation;
+        generation.setupChunkGeneration(container, world_name);
+        return generation;
     }
 
     public void setupEntities(InstanceContainer container) {
@@ -131,6 +139,27 @@ public class Initialiser {
         ), root);
 
         Main.advancementManager = manager;
+    }
+
+    public InstanceContainer setupNether(InstanceManager manager) {
+        return manager.createInstanceContainer(DimensionType.THE_NETHER);
+    }
+
+    public void setupPVP(GlobalEventHandler handler) {
+        MinestomPvP.init();
+
+        CombatFeatureSet modernVanilla = CombatFeatures.empty()
+                .version(CombatVersion.MODERN)
+                .add(CombatFeatures.VANILLA_SWEEPING)
+                .add(CombatFeatures.VANILLA_ARMOR)
+                .add(CombatFeatures.VANILLA_ATTACK)
+                .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
+                .add(CombatFeatures.VANILLA_BLOCK)
+                .add(CombatFeatures.VANILLA_CRITICAL)
+                .add(CombatFeatures.VANILLA_DAMAGE)
+                .add(CombatFeatures.VANILLA_EQUIPMENT)
+                .build();
+        handler.addChild(modernVanilla.createNode());
     }
 
     public void setupScheduler() {
