@@ -19,6 +19,7 @@ public class PlayerMoving implements EventHandler {
     public void setup(GlobalEventHandler eventHandler) {
         eventHandler.addListener(PlayerMoveEvent.class, event -> {
             Player plr = event.getPlayer();
+            if (plr.getPosition().y() < -70) plr.setInstance(Main.container, Main.config.server.spawn);
             if (plr.getInstance().getBlock(event.getNewPosition()).equals(Block.NETHER_PORTAL)) {
                 boolean is_allowed = Main.config.nether.enabled;
 
