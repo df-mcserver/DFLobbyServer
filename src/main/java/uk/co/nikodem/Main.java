@@ -17,6 +17,8 @@ public class Main {
     public static Logger logger = new Logger();
     public static Config config = new Config();
 
+    public static GlobalEventHandler eventHandler;
+
     public static MinecraftServer server;
 
     public static InstanceContainer container;
@@ -25,8 +27,6 @@ public class Main {
 
     public static InstanceContainer nether_container;
     public static Generation nether_generation;
-
-    public static GlobalEventHandler eventHandler;
 
     public static AdvancementManager advancementManager;
     public static Scheduler scheduler;

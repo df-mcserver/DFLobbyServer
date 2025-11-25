@@ -12,7 +12,12 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
 import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
+import net.minestom.server.registry.RegistryKey;
+import net.minestom.server.registry.RegistryTag;
+import net.minestom.server.registry.TagKey;
 import net.minestom.server.world.DimensionType;
+import org.jetbrains.annotations.NotNull;
+import uk.co.nikodem.Blocks.Handlers.SignHandler;
 import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.ServerCommands;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
@@ -26,33 +31,46 @@ import uk.co.nikodem.Main;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
 
+import java.util.Objects;
+
 import static uk.co.nikodem.Main.*;
 
 public class Initialiser {
     public void Initialise() {
         setServerVariables();
 
-        InstanceManager manager = MinecraftServer.getInstanceManager();
-        InstanceContainer lobby_container = setupInstanceContainer(manager);
-        Main.container = lobby_container;
-        Main.generation = setupGeneration(lobby_container, config.server.world);
-        setupEntities(lobby_container);
+        setupLobbyInstance();
+        setupNetherInstance();
 
-        GlobalEventHandler globalEventHandler = setupGlobalEventHandler();
-
-        collectivelySetupEventHandlers(globalEventHandler);
-        setupCommands();
-
+        collectivelySetupEventHandlers();
         setupScheduler();
-
+        setupCommands();
+        setupBlocks();
+        setupPVP();
         addEasterEggAdvancement();
 
-        InstanceContainer nether_container = setupNether(manager);
-        Main.nether_container = nether_container;
-        nether_generation = setupGeneration(nether_container, config.nether.world);
-        setupPVP(globalEventHandler);
-
         startServer();
+    }
+
+    public void setupLobbyInstance() {
+        InstanceContainer lobby_container = setupInstanceContainer(MinecraftServer.getInstanceManager());
+        Main.container = lobby_container;
+        Main.generation = setupGeneration(lobby_container, config.server.world);
+
+        setupEntities(lobby_container);
+    }
+
+    public void setupNetherInstance() {
+        InstanceContainer nether_container = setupNether(MinecraftServer.getInstanceManager());
+        Main.nether_container = nether_container;
+        Main.nether_generation = setupGeneration(nether_container, config.nether.world);
+    }
+
+    public void setupBlocks() {
+        RegistryTag<@NotNull Block> tag = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:all_signs"));
+        for (RegistryKey<@NotNull Block> key : Objects.requireNonNull(tag)) {
+            MinecraftServer.getBlockManager().registerHandler(key.key(), SignHandler::new);
+        }
     }
 
     public void collectivelySetupEventHandlers(GlobalEventHandler eventHandler) {
@@ -65,6 +83,17 @@ public class Initialiser {
         setupEventHandler(eventHandler, new PlayerPickBlock());
         setupEventHandler(eventHandler, new PlayerMoving());
         setupEventHandler(eventHandler, new PlayerCombat());
+    public void collectivelySetupEventHandlers() {
+        GlobalEventHandler events = MinecraftServer.getGlobalEventHandler();
+        setupEventHandler(events, new PlayerJoining());
+        setupEventHandler(events, new PlayerDisconnecting());
+        setupEventHandler(events, new RestrictedPlayerActions());
+        setupEventHandler(events, new PlayerInteract());
+        setupEventHandler(events, new PlayerInLava());
+        setupEventHandler(events, new PluginMessage());
+        setupEventHandler(events, new PlayerPickBlock());
+        setupEventHandler(events, new PlayerMoving());
+        setupEventHandler(events, new PlayerCombat());
     }
 
     public void setupCommands() {
@@ -84,10 +113,6 @@ public class Initialiser {
 
     public InstanceContainer setupInstanceContainer(InstanceManager manager) {
         return manager.createInstanceContainer(DimensionType.OVERWORLD);
-    }
-
-    public GlobalEventHandler setupGlobalEventHandler() {
-        return MinecraftServer.getGlobalEventHandler();
     }
 
     public void startServer() {
@@ -145,21 +170,27 @@ public class Initialiser {
         return manager.createInstanceContainer(DimensionType.THE_NETHER);
     }
 
-    public void setupPVP(GlobalEventHandler handler) {
+    public void setupPVP() {
         MinestomPvP.init();
 
         CombatFeatureSet modernVanilla = CombatFeatures.empty()
                 .version(CombatVersion.MODERN)
-                .add(CombatFeatures.VANILLA_SWEEPING)
-                .add(CombatFeatures.VANILLA_ARMOR)
-                .add(CombatFeatures.VANILLA_ATTACK)
                 .add(CombatFeatures.VANILLA_ATTACK_COOLDOWN)
-                .add(CombatFeatures.VANILLA_BLOCK)
-                .add(CombatFeatures.VANILLA_CRITICAL)
-                .add(CombatFeatures.VANILLA_DAMAGE)
+                .add(CombatFeatures.VANILLA_DEATH_MESSAGE)
+                .add(CombatFeatures.VANILLA_REGENERATION)
+                .add(CombatFeatures.VANILLA_ITEM_DAMAGE)
+                .add(CombatFeatures.VANILLA_EXHAUSTION)
+                .add(CombatFeatures.VANILLA_KNOCKBACK)
                 .add(CombatFeatures.VANILLA_EQUIPMENT)
+                .add(CombatFeatures.VANILLA_CRITICAL)
+                .add(CombatFeatures.VANILLA_SWEEPING)
+                .add(CombatFeatures.VANILLA_ATTACK)
+                .add(CombatFeatures.VANILLA_DAMAGE)
+                .add(CombatFeatures.VANILLA_ARMOR)
+                .add(CombatFeatures.VANILLA_BLOCK)
+                .add(CombatFeatures.VANILLA_FOOD)
                 .build();
-        handler.addChild(modernVanilla.createNode());
+        MinecraftServer.getGlobalEventHandler().addChild(modernVanilla.createNode());
     }
 
     public void setupScheduler() {
