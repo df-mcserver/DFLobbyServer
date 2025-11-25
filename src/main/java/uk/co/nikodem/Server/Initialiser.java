@@ -73,16 +73,6 @@ public class Initialiser {
         }
     }
 
-    public void collectivelySetupEventHandlers(GlobalEventHandler eventHandler) {
-        setupEventHandler(eventHandler, new PlayerJoining());
-        setupEventHandler(eventHandler, new PlayerDisconnecting());
-        setupEventHandler(eventHandler, new RestrictedPlayerActions());
-        setupEventHandler(eventHandler, new PlayerInteract());
-        setupEventHandler(eventHandler, new PlayerInLava());
-        setupEventHandler(eventHandler, new PluginMessage());
-        setupEventHandler(eventHandler, new PlayerPickBlock());
-        setupEventHandler(eventHandler, new PlayerMoving());
-        setupEventHandler(eventHandler, new PlayerCombat());
     public void collectivelySetupEventHandlers() {
         GlobalEventHandler events = MinecraftServer.getGlobalEventHandler();
         setupEventHandler(events, new PlayerJoining());
@@ -94,6 +84,7 @@ public class Initialiser {
         setupEventHandler(events, new PlayerPickBlock());
         setupEventHandler(events, new PlayerMoving());
         setupEventHandler(events, new PlayerCombat());
+        setupEventHandler(events, new PlayerRespawn());
     }
 
     public void setupCommands() {

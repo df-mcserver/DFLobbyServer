@@ -33,6 +33,7 @@
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/space.vectrix.flare/flare-fastutil/2.0.1/b07cbd5e37afc030717647781eebe7ba672cdd7a/flare-fastutil-2.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/space.vectrix.flare/flare/2.0.1/2b4594f599d4d1becce5d5057f3d7a056237a0c6/flare-2.0.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.github.TogAr2/MinestomPvP/56a831b41c/5790be7813ba57ea42c456e0786852b512b17400/MinestomPvP-56a831b41c.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$USER_HOME$/.gradle/caches/modules-2/files-2.1/net.kyori/adventure-text-minimessage/4.24.0/64547cb2485d5fc8007aaf3bab0e75108745f1b6/adventure-text-minimessage-4.24.0.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

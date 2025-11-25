@@ -7,4 +7,8 @@ public class Nether {
     public boolean enabled = false;
     public Pos spawnLocation = new Pos(0, 0, 0);
     public Pos portalLocation = new Pos(0, 0, 0);
+
+    public boolean pvpEnabled = false;
+    public Pos pvpZonePoint1 = new Pos(0, 0, 0);
+    public Pos pvpZonePoint2 = new Pos(0, 0, 0);
 }

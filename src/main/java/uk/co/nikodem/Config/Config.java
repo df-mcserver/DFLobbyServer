@@ -124,6 +124,10 @@ public class Config {
             nether.portalLocation = getCheckedPos(parsedConfiguration, "nether.portal_location", new Pos(0, 0, 0));
             nether.world = parsedConfiguration.getString("nether.world");
 
+            nether.pvpEnabled = parsedConfiguration.getBoolean("nether.pvp_enabled");
+            nether.pvpZonePoint1 = getCheckedPos(parsedConfiguration, "nether.pvp_zone_point_1", new Pos(0, 0, 0));
+            nether.pvpZonePoint2 = getCheckedPos(parsedConfiguration, "nether.pvp_zone_point_2", new Pos(0, 0, 0));
+
             List<Object> serverArray = parsedConfiguration.getList("server.servers", new ArrayList<>());
             int i = -1;
             for (Object obj : serverArray) {

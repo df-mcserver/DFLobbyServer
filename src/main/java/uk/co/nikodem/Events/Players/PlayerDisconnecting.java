@@ -29,6 +29,7 @@ public class PlayerDisconnecting implements EventHandler {
 
             PlayerValidation.removePlayerValidation(player);
             PlayerMoving.lastBlockWasPortal.remove(player.getUuid());
+            PlayerCombat.playerLeave(player);
             EditMode.removePlayer(player);
 
             Main.logger.log("Players", msg);

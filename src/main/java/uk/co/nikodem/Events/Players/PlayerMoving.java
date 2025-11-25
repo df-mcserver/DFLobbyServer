@@ -19,7 +19,12 @@ public class PlayerMoving implements EventHandler {
     public void setup(GlobalEventHandler eventHandler) {
         eventHandler.addListener(PlayerMoveEvent.class, event -> {
             Player plr = event.getPlayer();
+
             if (plr.getPosition().y() < -70) plr.setInstance(Main.container, Main.config.server.spawn);
+
+            if (plr.getInstance().getDimensionType() == DimensionType.THE_NETHER && Main.config.nether.pvpEnabled)
+                PlayerCombat.playerZoneCheck(isIsInZone(plr), plr);
+
             if (plr.getInstance().getBlock(event.getNewPosition()).equals(Block.NETHER_PORTAL)) {
                 boolean is_allowed = Main.config.nether.enabled;
 
@@ -38,5 +43,26 @@ public class PlayerMoving implements EventHandler {
                 else lastBlockWasPortal.put(plr.getUuid(), false);
             }
         });
+    }
+
+    private static boolean isIsInZone(Player plr) {
+        // you can probably do this in a more efficient way
+        double plrX = plr.getPosition().x();
+        double plrY = plr.getPosition().y();
+        double plrZ = plr.getPosition().z();
+
+        double p1X = Main.config.nether.pvpZonePoint1.x();
+        double p1Y = Main.config.nether.pvpZonePoint1.y();
+        double p1Z = Main.config.nether.pvpZonePoint1.z();
+
+        double p2X = Main.config.nether.pvpZonePoint2.x();
+        double p2Y = Main.config.nether.pvpZonePoint2.y();
+        double p2Z = Main.config.nether.pvpZonePoint2.z();
+
+        boolean isX = ((plrX >= Math.min(p1X, p2X)) && (plrX < Math.max(p1X, p2X)));
+        boolean isY = ((plrY >= Math.min(p1Y, p2Y)) && (plrY < Math.max(p1Y, p2Y)));
+        boolean isZ = ((plrZ >= Math.min(p1Z, p2Z)) && (plrZ < Math.max(p1Z, p2Z)));
+
+        return isX && isY && isZ;
     }
 }
