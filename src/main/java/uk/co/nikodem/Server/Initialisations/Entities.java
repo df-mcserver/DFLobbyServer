@@ -1,6 +1,6 @@
 package uk.co.nikodem.Server.Initialisations;
 
-import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.InstanceContainer;
 import uk.co.nikodem.Config.Types.Server;
@@ -14,7 +14,8 @@ public class Entities {
         for (Server server : Main.config.server.servers) {
             if (server.entity == null) continue;
             Entity entity = new Entity(server.entity);
-            if (!Objects.equals(server.name, "")) entity.setCustomName(Component.text(server.name));
+
+            if (!Objects.equals(server.name, "")) entity.setCustomName(MiniMessage.miniMessage().deserialize(server.name));
             entity.setNoGravity(true);
             entity.setInstance(container, server.position);
             entity.setCustomNameVisible(!Objects.equals(server.name, ""));
