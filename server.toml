@@ -5,16 +5,16 @@ compression_threshold = 0
 # sets a protocol version where the player will be locked into the lobby
 # and only allowed to teleport to unrestricted servers
 # set to -1 to disable, requires player_validation to be enabled
-minimum_protocol_version = -1
+minimum_protocol_version = 772
 # the minimum version displayed to the client if they are under the minimum protocol version
-minimum_version_name = ""
+minimum_version_name = "1.21.7"
 # checks the incompatibility of the client and the real protocol version
 # before the player is allowed to join other servers
 # requires df:proxy channel to be used (or DFProxyPlugin)
-player_validation = false
+player_validation = true
 # set whether the server should authenticate with mojang servers
 # required for proxy support
-online = false
+online = true
 
 # settings for proxy connection
 # "proxy" can be one of the following
@@ -26,11 +26,11 @@ online = false
 #  -  no proxy.
 [proxy]
 proxy = "velocity"
-secret = ""
+secret = "XXXXXX"
 
 [nether]
 enabled = false
-world = "world_nether"
+world = "worlds/world_nether"
 spawn_location = {x = 0.0, y = 0.0, z = 0.0}
 portal_location = {x = 0.0, y = 0.0, z = 0.0}
 
@@ -51,6 +51,6 @@ world = "worlds/world"
 
     [[server.mobs]]
     entity = "zombie"
-    name = "SMP (Season 3)"
+    name = "SMP"
     position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
     server = "smp"

@@ -42,25 +42,25 @@ spawn = {x = 119.5, y = 2.0, z = 53.5}
 world = "worlds/world"
 
     [[server.servers]]
-    name = "Creative"
-    server = "creative"
+    name = "UnrestrictedExample"
+    server = "example0"
     unrestricted = true
 #
 #    [[server.server]]
 #    entity = "creeper"
-#    name = "Creative"
+#    name = "UnrestrictedExampleWithEntity"
 #    position = {x = 120.5, y = 4.0, z = 73.5, yaw = 180.0}
-#    server = "creative"
+#    server = "example1"
 #    unrestricted = true
 
     [[server.servers]]
     entity = "zombie"
-    name = "TestSMP"
+    name = "RestrictedExample"
     position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
-    server = "testsmp"
+    server = "example2"
 
     [[server.servers]]
     entity = "bamboo_raft"
     name = ""
-    server = "testsmp"
+    server = "example3_noname"
     position = {x = 102.0, y = 1.2, z = 55.0, yaw = 180.0}
