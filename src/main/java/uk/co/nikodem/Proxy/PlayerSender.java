@@ -54,18 +54,18 @@ public class PlayerSender {
     }
 
     public static void informPlayer(Player plr, String server) {
-        plr.sendMessage(Component.text("Sending you to server "+server+"!", NamedTextColor.AQUA));
+        plr.sendActionBar(Component.text("Sending you to server "+server+"!", NamedTextColor.AQUA));
     }
 
     public static void informPlayerError(Player plr) {
-        plr.sendMessage(Component.text("Failed to send you to server!", NamedTextColor.RED));
+        plr.sendActionBar(Component.text("Failed to send you to server!", NamedTextColor.RED));
     }
 
     public static void informPlayerTimeoutError(Player plr) {
-        plr.sendMessage(Component.text("Request timed out!", NamedTextColor.RED));
+        plr.sendActionBar(Component.text("Request timed out!", NamedTextColor.RED));
     }
 
     public static void informPlayerInvalidError(Player plr) {
-        plr.sendMessage(Component.text("Your client is not validated!", NamedTextColor.RED));
+        plr.sendActionBar(Component.text("Your client is not validated!", NamedTextColor.RED));
     }
 }

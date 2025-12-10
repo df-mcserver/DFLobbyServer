@@ -41,7 +41,7 @@ public class PlayerJoining implements EventHandler {
             }
 
             if (Main.config.connection.player_validation) {
-                if (PlayerValidation.playerIsValidated(player)) return;
+                if (PlayerValidation.playerFinishedValidation(player)) return;
                 Main.logger.log("Players", "Attempting to validate "+player.getUsername());
                 BungeecordAbstractions.sendIncompatibleClientMessage(player);
                 BungeecordAbstractions.sendRealProtocolVersionMessage(player);

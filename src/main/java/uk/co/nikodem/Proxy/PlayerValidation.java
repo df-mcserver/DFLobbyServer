@@ -86,6 +86,12 @@ public class PlayerValidation {
         return validation.playerIsValidated();
     }
 
+    public static boolean playerFinishedValidation(Player plr) {
+        PlayerValidation validation = validations.get(plr);
+        if (validation == null) return false;
+        return validation.hasFinishedValidation();
+    }
+
     public static PlayerValidation getPlayerValidation(Player plr) {
         PlayerValidation validation = validations.get(plr);
         if (validation != null) return validation;
