@@ -1,7 +1,5 @@
 package uk.co.nikodem.Events.Plugins;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
@@ -11,6 +9,7 @@ import uk.co.nikodem.Events.Plugins.MessageReceivers.IncompatibleClient;
 import uk.co.nikodem.Events.Plugins.MessageReceivers.IsGeyser;
 import uk.co.nikodem.Events.Plugins.MessageReceivers.RealProtocolVersion;
 import uk.co.nikodem.Main;
+import uk.co.nikodem.Proxy.PlayerValidation;
 import uk.co.nikodem.Utils.StringHelper;
 
 import java.util.HashMap;
@@ -21,14 +20,14 @@ public class PluginMessage implements EventHandler {
     // any minimap mods i could find :p
     public static final String sqrmapModNames = "registered_arg_mappingscardinal-components:attachment_sync_v1adventure"; // might be innocent
     public static final String pl3xModNames = "entity_syncpl3xmap:perm_reqpl3xmap:registered_arg_mappingspl3xmap:client_map_datapl3xmap";
-    public static final String xaeroModNames = "vibrationxaeroworldmap:1sxaerominimap:client_map_dataxaerominimap:registered_arg_mappingsxaeroworldmap:attachment_sync_v1xaerominimap:attachment_sync_v1xaeroworldmap:mainxaerominimap";
+    public static final String xaeroModNames = "xaero:vibrationxaeroworldmap:1sxaerominimap:client_map_dataxaerominimap:registered_arg_mappingsxaeroworldmap:attachment_sync_v1xaerominimap:attachment_sync_v1xaeroworldmap:mainxaerominimap";
     public static final String journeyMapModNames = "mp_options_reqjourneymap:journeymap:admin_savejourneymap:mainjourneymap:player_locjourneymap:teleport_reqjourneymap:remove_playerjourneymap:versionjourneymap:client_server_datajourneymap:open_screenjourneymap";
 
     public static final List<String> bannedMods =
             List.of(
-                    (pl3xModNames
-                            +xaeroModNames
-                            +journeyMapModNames
+                    (pl3xModNames+":"
+                            +xaeroModNames+":"
+                            +journeyMapModNames+":"
                             +sqrmapModNames
                     ).split(":")
             );
@@ -51,10 +50,10 @@ public class PluginMessage implements EventHandler {
                 // velocity doesn't allow plugins to handle register messages
                 // so I am forced to do it in the lobby instead
                 // only works for fabric (+ their derivatives) and neoforge afaik
-                if (playerContainsBadMod(event)) illegalStateErrorPlayer(plr);
+                if (playerContainsBadMod(event)) invalidatePlayer(plr);
             } else if (event.getIdentifier().equals("pl3xmap:server_server_data")) {
                 // banned mod plugin message identifier
-                illegalStateErrorPlayer(plr);
+                invalidatePlayer(plr);
             } else if (event.getIdentifier().equals(Main.config.proxy.messagingChannel)) {
                 String[] args = event.getMessageString().split(" ");
                 String command = StringHelper.sanitiseString(args[0]);
@@ -72,7 +71,7 @@ public class PluginMessage implements EventHandler {
         List<String> mods = List.of(event.getMessageString().split(":"));
         for (String modName : mods) {
             for (String bannedModName : bannedMods) {
-                if (StringHelper.sanitiseString(modName).equals(StringHelper.sanitiseString(bannedModName))) {
+                if (StringHelper.sanitiseString(modName).contains(StringHelper.sanitiseString(bannedModName))) {
                     containsBadMod = true;
                     break;
                 }
@@ -81,9 +80,7 @@ public class PluginMessage implements EventHandler {
         return containsBadMod;
     }
 
-    public static void illegalStateErrorPlayer(Player plr) {
-        Main.logger.log("Mods", "Player "+plr.getUsername()+" tried to join the server with banned mods!");
-        // obfuscated error message
-        plr.kick(Component.text("An internal server connection error occured.", NamedTextColor.RED));
+    public static void invalidatePlayer(Player plr) {
+        PlayerValidation.getPlayerValidation(plr).markPlayerAsInvalidModHolder();
     }
 }

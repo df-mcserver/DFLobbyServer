@@ -3,6 +3,7 @@ package uk.co.nikodem.Proxy;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.entity.Player;
 import org.jetbrains.annotations.Nullable;
 import uk.co.nikodem.Main;
@@ -22,6 +23,12 @@ public class PlayerValidation {
 
     private boolean validatedIncompatibility = false;
     private boolean hasCompatibleClient = false;
+
+    private boolean invalidModDetected = false;
+
+    public void markPlayerAsInvalidModHolder() {
+        this.invalidModDetected = true;
+    }
 
     public void markProtocolAsValidated(Player plr, boolean isValid) {
         this.validatedProtocolVersion = true;
@@ -49,7 +56,7 @@ public class PlayerValidation {
     }
 
     public boolean playerIsValidated() {
-        return hasValidProtocolVersion && hasCompatibleClient;
+        return hasValidProtocolVersion && hasCompatibleClient && !(invalidModDetected);
     }
 
     public void onFinishValidation(Player plr) {
@@ -66,6 +73,10 @@ public class PlayerValidation {
             for (Component msg : messages) {
                 plr.sendMessage(msg);
             }
+        }
+
+        if (invalidModDetected) {
+            plr.sendMessage(Component.text("An unsupported mod has been detected! You will not be able to join restricted servers until this mod is removed!", NamedTextColor.RED));
         }
     }
 
@@ -120,8 +131,7 @@ public class PlayerValidation {
                 .color(TextColor.color(0x03989e)));
         result.add(Component.text("You can join the discord server to keep updated with the server's updates!")
                 .color(TextColor.color(0x5d782e)));
-        result.add(Component.text("You can find the discord server at https://discord.gg/SpukTa6jBf")
-                .color(TextColor.color(0x588163)));
+        result.add(MiniMessage.miniMessage().deserialize("<#588163>You can find the discord server at <click:open_url:'https://discord.gg/SpukTa6jBf'>https://discord.gg/SpukTa6jBf</click>"));
 
         return result;
     }
