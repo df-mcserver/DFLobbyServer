@@ -3,7 +3,6 @@ package uk.co.nikodem.Events.Players;
 import io.github.togar2.pvp.events.PrepareAttackEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.minestom.server.entity.EquipmentSlot;
 import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.item.ItemStack;
@@ -35,18 +34,11 @@ public class PlayerCombat implements EventHandler {
                 plr.setHeldItemSlot((byte) 0);
 
                 plr.sendActionBar(Component.text("You are now in the PVP Zone!", NamedTextColor.RED));
-                plr.getInventory().setEquipment(EquipmentSlot.HELMET, (byte)0, ItemStack.of(Material.IRON_HELMET));
-                plr.getInventory().setEquipment(EquipmentSlot.CHESTPLATE, (byte)0, ItemStack.of(Material.IRON_CHESTPLATE));
-                plr.getInventory().setEquipment(EquipmentSlot.LEGGINGS, (byte)0, ItemStack.of(Material.IRON_LEGGINGS));
-                plr.getInventory().setEquipment(EquipmentSlot.BOOTS, (byte)0, ItemStack.of(Material.IRON_BOOTS));
 
                 plr.getInventory().setItemStack(0, ItemStack.of(Material.IRON_SWORD));
                 plr.getInventory().setItemStack(1, ItemStack.of(Material.IRON_AXE));
                 plr.getInventory().setItemStack(2, ItemStack.of(Material.GOLDEN_APPLE, 5));
                 plr.getInventory().setItemStack(3, ItemStack.of(Material.BREAD, 64));
-                plr.getInventory().setItemStack(4, ItemStack.of(Material.AIR, 1));
-
-                plr.sendPacket(plr.getEquipmentsPacket());
             }
         } else {
             if (playersInCombat.contains(plr.getUuid())) {
