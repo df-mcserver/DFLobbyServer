@@ -4,6 +4,7 @@ import io.github.togar2.pvp.events.PrepareAttackEvent;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.entity.Player;
+import net.minestom.server.entity.attribute.Attribute;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.item.ItemStack;
 import net.minestom.server.item.Material;
@@ -39,12 +40,18 @@ public class PlayerCombat implements EventHandler {
                 plr.getInventory().setItemStack(1, ItemStack.of(Material.IRON_AXE));
                 plr.getInventory().setItemStack(2, ItemStack.of(Material.GOLDEN_APPLE, 5));
                 plr.getInventory().setItemStack(3, ItemStack.of(Material.BREAD, 64));
+
+                plr.getAttribute(Attribute.ARMOR).setBaseValue(15D); // iron armour work around
             }
         } else {
             if (playersInCombat.contains(plr.getUuid())) {
                 playersInCombat.remove(plr.getUuid());
                 plr.sendActionBar(Component.text("You are no longer in the PVP Zone!", NamedTextColor.GREEN));
                 plr.getInventory().clear();
+                plr.getAttribute(Attribute.ARMOR).setBaseValue(0D);
+                plr.setHealth(20f);
+                plr.setFood(20);
+                plr.setFoodSaturation(3f);
             }
         }
     }
