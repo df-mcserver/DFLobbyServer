@@ -8,14 +8,16 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.Scheduler;
 import uk.co.nikodem.Config.Config;
+import uk.co.nikodem.Config.ConfigManager;
 import uk.co.nikodem.Server.Initialisations.Entities;
+import uk.co.nikodem.Server.Initialisations.Generation;
 import uk.co.nikodem.Server.Initialiser;
 import uk.co.nikodem.Utils.Logger;
-import uk.co.nikodem.Server.Initialisations.Generation;
 
 public class Main {
     public static Logger logger = new Logger();
     public static Config config = new Config();
+    public static ConfigManager manager = new ConfigManager();
 
     public static GlobalEventHandler eventHandler;
 
@@ -37,24 +39,20 @@ public class Main {
         // load configuration
         logger.log("Main", "Beginning execution!");
 
-        if (!config.getExists()) {
+        if (!manager.getExists()) {
             logger.warn("Config", "Configuration doesn't exist! Creating now..");
 
-            if (config.create()) logger.log("Config", "Created new configuration!");
+            if (manager.create()) logger.log("Config", "Created new configuration!");
             else logger.error("Config", "Failed to create new configuration!");
 
-            synchronized (config) {
-                config.update();
-            }
+            config = manager.update();
         } else {
-            if (!config.getIsValidConfiguration()) {
+            if (!manager.getIsValidConfiguration()) {
                 logger.error("Config", "Invalid configuration!");
                 return;
             }
 
-            synchronized (config) {
-                config.update();
-            }
+            config = manager.update();
 
             logger.log("Config", "Loaded valid configuration.");
         }
@@ -64,18 +62,18 @@ public class Main {
         Boolean success = false;
 
         // initialise proxy
-        switch (config.proxy.proxy) {
+        switch (config.proxy.getProxy()) {
             case "velocity":
             case "gate":
-                if (config.connection.online) {
-                    logger.error("Proxy", "Proxy server support for \""+config.proxy.proxy+"\" cannot be enabled, because online mode is enabled!");
+                if (config.connection.isOnline()) {
+                    logger.error("Proxy", "Proxy server support for \""+config.proxy.getProxy()+"\" cannot be enabled, because online mode is enabled!");
                     logger.warn("Proxy", "Defaulting to offline authentication!");
                     Main.server = MinecraftServer.init(new Auth.Offline());
                     success = true;
                     break;
                 }
                 try {
-                    Main.server = MinecraftServer.init(new Auth.Velocity(config.proxy.secret));
+                    Main.server = MinecraftServer.init(new Auth.Velocity(config.proxy.getSecret()));
                     logger.log("Proxy", "Velocity support enabled!");
                     success = true;
                 } catch (IllegalArgumentException e) {
@@ -84,7 +82,7 @@ public class Main {
 
                 break;
             default:
-                if (config.connection.online) Main.server = MinecraftServer.init(new Auth.Online());
+                if (config.connection.isOnline()) Main.server = MinecraftServer.init(new Auth.Online());
                 else Main.server = MinecraftServer.init(new Auth.Offline());
                 success = true;
                 break;

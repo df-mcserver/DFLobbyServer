@@ -19,7 +19,7 @@ public class PlayerSender {
     }
 
     public static void sendPlayer(Player plr, String server, boolean ignoreValidation) {
-        if (Main.config.connection.player_validation && !PlayerValidation.playerIsValidated(plr) && !ignoreValidation) {
+        if (Main.config.connection.doPlayerValidation() && !PlayerValidation.playerIsValidated(plr) && !ignoreValidation) {
             informPlayerInvalidError(plr);
             return;
         }

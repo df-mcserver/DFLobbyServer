@@ -10,7 +10,7 @@ A minimal lobby server written with [Minestom (1.21.8, 2025.10.05)](https://gith
 Configuration is done via the server.toml file, which is auto-generated upon first boot.  
 This server expects a pre-made lobby server, and has an optional nether world.
 
-See [this file](server.toml) for an example configuration, but [this file](src/main/resources/server.toml) for the automatically generated default configuration.
+See [this file](src/main/resources/server.toml) for the automatically generated default configuration.
 
 ## Dependencies
 - DFProxyPlugin (should work without it)

@@ -11,16 +11,11 @@ import net.minestom.server.advancements.*;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.registry.RegistryTag;
-import net.minestom.server.registry.TagKey;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
 import uk.co.nikodem.Blocks.Handlers.SignHandler;
-import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.ServerCommands;
+import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
 import uk.co.nikodem.Commands.World.ExitEditWorldCommand;
 import uk.co.nikodem.Commands.World.SaveWorldCommand;
@@ -32,10 +27,8 @@ import uk.co.nikodem.Main;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
 
-import java.util.Iterator;
-import java.util.Objects;
-
-import static uk.co.nikodem.Main.*;
+import static uk.co.nikodem.Main.config;
+import static uk.co.nikodem.Main.logger;
 
 public class Initialiser {
     public void Initialise() {
@@ -57,7 +50,7 @@ public class Initialiser {
     public void setupLobbyInstance() {
         InstanceContainer lobby_container = setupInstanceContainer(MinecraftServer.getInstanceManager());
         Main.container = lobby_container;
-        Main.generation = setupGeneration(lobby_container, config.server.world);
+        Main.generation = setupGeneration(lobby_container, config.lobby.getWorldName());
 
         setupEntities(lobby_container);
     }
@@ -65,7 +58,7 @@ public class Initialiser {
     public void setupNetherInstance() {
         InstanceContainer nether_container = setupNether(MinecraftServer.getInstanceManager());
         Main.nether_container = nether_container;
-        Main.nether_generation = setupGeneration(nether_container, config.nether.world);
+        Main.nether_generation = setupGeneration(nether_container, config.minigames.nether.getWorldName());
     }
 
     public void setupBlocks() {
@@ -84,6 +77,7 @@ public class Initialiser {
         setupEventHandler(events, new PlayerMoving());
         setupEventHandler(events, new PlayerCombat());
         setupEventHandler(events, new PlayerRespawn());
+        setupEventHandler(events, new PlayerHunger());
     }
 
     public void setupCommands() {
@@ -100,7 +94,7 @@ public class Initialiser {
 
     public void setServerVariables() {
         MinecraftServer.setBrandName("DFLobbyServer");
-        MinecraftServer.setCompressionThreshold(Main.config.connection.compression_threshold);
+        MinecraftServer.setCompressionThreshold(Main.config.connection.getCompressionThreshold());
     }
 
     public InstanceContainer setupInstanceContainer(InstanceManager manager) {
@@ -108,8 +102,8 @@ public class Initialiser {
     }
 
     public void startServer() {
-        String addr = config.connection.address;
-        int port = config.connection.port;
+        String addr = config.connection.getAddress();
+        int port = config.connection.getPort();
 
         try {
             Main.server.start(addr, port);

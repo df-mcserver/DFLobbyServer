@@ -54,7 +54,7 @@ public class PluginMessage implements EventHandler {
             } else if (event.getIdentifier().equals("pl3xmap:server_server_data")) {
                 // banned mod plugin message identifier
                 invalidatePlayer(plr);
-            } else if (event.getIdentifier().equals(Main.config.proxy.messagingChannel)) {
+            } else if (event.getIdentifier().equals(Main.config.proxy.getMessagingChannel())) {
                 String[] args = event.getMessageString().split(" ");
                 String command = StringHelper.sanitiseString(args[0]);
 

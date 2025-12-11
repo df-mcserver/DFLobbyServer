@@ -11,7 +11,7 @@ public class ConnectStatus implements DFMessageReceiver {
     @Override
     public void run(PlayerPluginMessageEvent event, String[] args) {
         Player plr = event.getPlayer();
-        if (Main.config.proxy.expectChannelResponse) {
+        if (Main.config.proxy.getExpectsChannelResponse()) {
             if (!PlayerSender.getIsBeingSent(plr)) return;
             String status = StringHelper.sanitiseString(args[1]);
             if (status.equals("false")) {

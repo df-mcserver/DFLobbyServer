@@ -16,7 +16,7 @@ public class PlayerRespawn implements EventHandler {
                 if (PlayerMoving.lastBlockWasPortal.containsKey(plr.getUuid())) PlayerMoving.lastBlockWasPortal.replace(plr.getUuid(), true);
                 else PlayerMoving.lastBlockWasPortal.put(plr.getUuid(), true);
 
-                event.setRespawnPosition(Main.config.nether.spawnLocation);
+                event.setRespawnPosition(Main.config.minigames.nether.getPortalInNetherLocation());
 
                 PlayerCombat.playerRespawn(plr);
             }

@@ -22,7 +22,7 @@ public class PlayerJoining implements EventHandler {
         eventHandler.addListener(AsyncPlayerConfigurationEvent.class, event -> {
             Player player = event.getPlayer();
             event.setSpawningInstance(Main.container);
-            player.setRespawnPoint(Main.config.server.spawn);
+            player.setRespawnPoint(Main.config.lobby.getSpawnLocation());
             player.setGameMode(Main.DEFAULT_GAMEMODE);
             Main.logger.log("Players", player.getUsername()+" is connecting to the server...");
 
@@ -45,7 +45,7 @@ public class PlayerJoining implements EventHandler {
                     new ServerLinksPacket.Entry(Component.text("Join the discord server!"), "https://discord.gg/SpukTa6jBf")
             ));
 
-            if (Main.config.connection.player_validation) {
+            if (Main.config.connection.doPlayerValidation()) {
                 if (PlayerValidation.playerFinishedValidation(player)) return;
                 Main.logger.log("Players", "Attempting to validate "+player.getUsername());
                 BungeecordAbstractions.sendIncompatibleClientMessage(player);

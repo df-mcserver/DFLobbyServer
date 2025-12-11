@@ -20,7 +20,7 @@ public class RealProtocolVersion implements DFMessageReceiver {
             return;
         }
         PlayerValidation.getPlayerValidation(plr).markProtocolAsValidated(plr,
-                Main.config.connection.minimum_protocol_version <= protocolVersion
+                Main.config.connection.getMinimumProtocolVersion() <= protocolVersion
         );
     }
 }

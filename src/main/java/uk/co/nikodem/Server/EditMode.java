@@ -15,7 +15,7 @@ public class EditMode {
     public static List<UUID> editModePlayers = new ArrayList<>();
 
     public static boolean canEnterEditMode(Player plr) {
-        return Main.config.isPlayerAnAdmin(plr) && (!Main.config.connection.player_validation || PlayerValidation.playerIsValidated(plr));
+        return Main.config.admins.isPlayerAnAdmin(plr) && (!Main.config.connection.doPlayerValidation() || PlayerValidation.playerIsValidated(plr));
     }
 
     public static boolean isInEditMode(Player plr) {

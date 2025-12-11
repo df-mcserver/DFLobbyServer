@@ -1,178 +1,183 @@
 package uk.co.nikodem.Config;
 
-import com.moandjiezana.toml.Toml;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import org.jspecify.annotations.Nullable;
-import uk.co.nikodem.Config.Sections.*;
-import uk.co.nikodem.Config.Types.Server;
-import uk.co.nikodem.Main;
+import org.jetbrains.annotations.Nullable;
 
-import java.io.*;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Config {
-    private final String configName = "server.toml";
+    public static class Connection {
+        private String address = "0.0.0.0";
+        private int port = 25565;
+        private int compression_threshold = 0;
+        private boolean online = true;
+        private boolean player_validation = true;
+        private int minimum_protocol_version = 0;
+        private String minimum_version_name = "";
 
-    public Connection connection;
-    public Proxy proxy;
-    public uk.co.nikodem.Config.Sections.Server server;
-    public Minigames minigames;
-    public Admins admins;
-    public Nether nether;
-
-    public boolean getExists() {
-        Path source;
-        try {
-            source = getConfigFilePath();
-        } catch (URISyntaxException | NullPointerException e) {
-            return false;
+        public String getAddress() {
+            return address;
         }
-
-        return source.toFile().exists();
-    }
-
-    public boolean getIsValidConfiguration() {
-        Path source;
-        try {
-            source = getConfigFilePath();
-        } catch (URISyntaxException e) {
-            return false;
+        public int getPort() {
+            return port;
         }
-
-        return true;
-    }
-
-    public Path getConfigFilePath() throws URISyntaxException, NullPointerException {
-        Path path = Path.of(configName);
-        return path;
-    }
-
-    public Double getCheckedDouble(Toml config, String key, Double defaultValue) {
-        try {
-            Double val = config.getDouble(key);
-            return val == null ? defaultValue : val;
-        } catch (NullPointerException e) {
-            return defaultValue;
+        public int getCompressionThreshold() {
+            return compression_threshold;
+        }
+        public boolean isOnline() {
+            return online;
+        }
+        public boolean doPlayerValidation() {
+            return player_validation;
+        }
+        public int getMinimumProtocolVersion() {
+            return minimum_protocol_version;
+        }
+        public String getMinimumVersionName() {
+            return minimum_version_name;
         }
     }
 
-    public Float getCheckedFloat(Toml config, String key, Float defaultValue) {
-        try {
-            Double val = config.getDouble(key);
-            return val == null ? defaultValue : val.floatValue();
-        } catch (NullPointerException e) {
-            return defaultValue;
+    public static class Proxy {
+        private String proxy = "";
+        private String secret = "";
+        private String messaging_channel = "";
+        private Boolean expect_channel_response = false;
+
+        public String getProxy() {
+            return proxy;
+        }
+        public String getSecret() {
+            return secret;
+        }
+        public String getMessagingChannel() {
+            return messaging_channel;
+        }
+        public Boolean getExpectsChannelResponse() {
+            return expect_channel_response;
         }
     }
 
-    public Pos getCheckedPos(Toml config, String key, @Nullable Pos defaultValue) {
-        Toml pos = config.getTable(key);
-        if (defaultValue == null) defaultValue = new Pos(0, 0, 0);
-        Double x = getCheckedDouble(pos,"x", defaultValue.x());
-        Double y = getCheckedDouble(pos,"y", defaultValue.y());
-        Double z = getCheckedDouble(pos,"z", defaultValue.z());
-        float yaw = getCheckedFloat(pos,"yaw", defaultValue.yaw());
-        float pitch = getCheckedFloat(pos,"pitch", defaultValue.pitch());
+    public static class Lobby {
+        private String world = "world";
+        private Pos spawn = new Pos(0, 40, 0);
 
-        return new Pos(x, y, z, yaw, pitch);
+        public String getWorldName() {
+            return world;
+        }
+        public Pos getSpawnLocation() {
+            return spawn;
+        }
     }
 
-    public void update() {
-        try {
-            Path source = getConfigFilePath();
-            File file = source.toFile();
+    public static class Servers {
 
-            Toml defaultConfiguration = new Toml().read(Main.class.getResourceAsStream("/"+configName));
-            Toml parsedConfiguration = new Toml(defaultConfiguration).read(file);
+        public static class ServerInformation {
+            private String entity = null;
+            private Pos position = null;
+            private String server = null;
+            private String name = null;
+            private Boolean unrestricted = false;
 
-            if (this.proxy == null) this.proxy = new Proxy();
-            if (this.connection == null) this.connection = new Connection();
-            if (this.server == null) this.server = new uk.co.nikodem.Config.Sections.Server();
-            if (this.minigames == null) this.minigames = new Minigames();
-            if (this.admins == null) this.admins = new Admins();
-            if (this.nether == null) this.nether = new Nether();
-
-            // probably a better way to do this
-            proxy.proxy = parsedConfiguration.getString("proxy.proxy");
-            proxy.secret = parsedConfiguration.getString("proxy.secret");
-            proxy.messagingChannel = parsedConfiguration.getString("proxy.messagingChannel");
-            proxy.expectChannelResponse = parsedConfiguration.getBoolean("proxy.expectChannelResponse");
-
-            connection.address = parsedConfiguration.getString("connection.address");
-            connection.port = parsedConfiguration.getLong("connection.port").intValue();
-            connection.compression_threshold = parsedConfiguration.getLong("connection.compression_threshold").intValue();
-            connection.online = parsedConfiguration.getBoolean("connection.online");
-            connection.player_validation = parsedConfiguration.getBoolean("connection.player_validation", false);
-            connection.minimum_protocol_version = parsedConfiguration.getLong("connection.minimum_protocol_version", 0L).intValue();
-            connection.minimum_version_name = parsedConfiguration.getString("connection.minimum_version_name");
-
-            server.world = parsedConfiguration.getString("server.world", null);
-            server.spawn = getCheckedPos(parsedConfiguration, "server.spawn", null);
-
-            minigames.parkour.respawn = getCheckedPos(parsedConfiguration, "minigames.parkour.respawn", null);
-            minigames.parkour.enabled = parsedConfiguration.getBoolean("minigames.parkour.enabled", false);
-
-            admins.byUsername = parsedConfiguration.getList("admins.byUsername", new ArrayList<>());
-
-            nether.enabled = parsedConfiguration.getBoolean("nether.enabled");
-            nether.spawnLocation = getCheckedPos(parsedConfiguration, "nether.spawn_location", new Pos(0, 0, 0));
-            nether.portalLocation = getCheckedPos(parsedConfiguration, "nether.portal_location", new Pos(0, 0, 0));
-            nether.world = parsedConfiguration.getString("nether.world");
-
-            nether.pvpEnabled = parsedConfiguration.getBoolean("nether.pvp_enabled");
-            nether.pvpZonePoint1 = getCheckedPos(parsedConfiguration, "nether.pvp_zone_point_1", new Pos(0, 0, 0));
-            nether.pvpZonePoint2 = getCheckedPos(parsedConfiguration, "nether.pvp_zone_point_2", new Pos(0, 0, 0));
-
-            List<Object> serverArray = parsedConfiguration.getList("server.servers", new ArrayList<>());
-            int i = -1;
-            for (Object obj : serverArray) {
-                i++;
-                Toml table = parsedConfiguration.getTable("server.servers["+i+"]");
-                if (table == null) continue;
-                if (table.isEmpty()) continue;
-
-                try {
-                    String entityTypeName = table.getString("entity", null);
-                    EntityType type = entityTypeName == null ? null : EntityType.fromKey(entityTypeName);
-                    Pos position = getCheckedPos(table, "position", null);
-                    String name = table.getString("name", null);
-                    String servername = table.getString("server", null);
-                    boolean unrestricted = table.getBoolean("unrestricted", false);
-
-                    Main.logger.log("Servers", "Added server \""+name+"\"!");
-
-                    server.servers.add(Server.create(type, position, servername, name, unrestricted));
-                } catch (NullPointerException e) {
-                    e.printStackTrace();
-                }
+            public String getEntityTypeName() {
+                return entity;
             }
+            public @Nullable EntityType getEntityType() {
+                // not the most efficient lol
+                for (EntityType type : EntityType.values()) {
+                    if (type.key().value().equalsIgnoreCase(entity)) return type;
+                }
+                return null;
+            }
+            public Pos getPosition() {
+                return position;
+            }
+            public String getServerName() {
+                return server;
+            }
+            public String getDisplayName() {
+                return name;
+            }
+            public Boolean isUnrestricted() {
+                return unrestricted;
+            }
+        }
 
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
+
+        private List<ServerInformation> servers = new ArrayList<>();
+
+        public List<ServerInformation> getServers() {
+            return servers;
         }
     }
 
-    public boolean create() {
-        try {
-            InputStream in = Main.class.getResourceAsStream("/"+configName);
-            FileOutputStream out = new FileOutputStream(configName);
-            out.write(in.readAllBytes());
-            out.close();
-            in.close();
-        } catch (IOException | NullPointerException e) {
-            e.printStackTrace();
-            return false;
+    public static class Minigames {
+        public static class Parkour {
+            private Boolean enabled = false;
+            private Pos respawn = null;
+
+            public Boolean isEnabled() {
+                return enabled;
+            }
+            public Pos getRespawnLocation() {
+                return respawn;
+            }
         }
 
-        return true;
+        public static class Nether {
+            private String world = "world_nether";
+            private Boolean enabled = false;
+            private Boolean combat_enabled = false;
+            private Pos portal_in_nether_location = null;
+            private Pos portal_in_overworld_location = null;
+            private Pos combat_zone_point1 = null;
+            private Pos combat_zone_point2 = null;
+
+            public String getWorldName() {
+                return world;
+            }
+            public Boolean isEnabled() {
+                return enabled;
+            }
+            public Boolean isCombatEnabled() {
+                return combat_enabled;
+            }
+            public Pos getPortalInNetherLocation() {
+                return portal_in_nether_location;
+            }
+            public Pos getPortalInOverworldLocation() {
+                return portal_in_overworld_location;
+            }
+            public Pos getCombatZonePoint1() {
+                return combat_zone_point1;
+            }
+            public Pos getCombatZonePoint2() {
+                return combat_zone_point2;
+            }
+        }
+
+        public Parkour parkour = new Parkour();
+        public Nether nether = new Nether();
     }
 
-    public boolean isPlayerAnAdmin(Player plr) {
-        return admins.byUsername.contains(plr.getUsername());
+    public static class Admins {
+        private List<String> by_username = new ArrayList<>();
+
+        public List<String> getByUsername() {
+            return by_username;
+        }
+        public boolean isPlayerAnAdmin(Player plr) {
+            return by_username.contains(plr.getUsername());
+        }
     }
+
+    public Connection connection = new Connection();
+    public Proxy proxy = new Proxy();
+    public Lobby lobby = new Lobby();
+    public Servers servers = new Servers();
+    public Minigames minigames = new Minigames();
+    public Admins admins = new Admins();
 }

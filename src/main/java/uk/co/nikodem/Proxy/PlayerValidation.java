@@ -62,7 +62,7 @@ public class PlayerValidation {
     public void onFinishValidation(Player plr) {
         if (!hasValidProtocolVersion) {
             plr.sendMessage(
-                    Component.text("You are on an older version of Minecraft!\nYou will not be able to join any restricted servers.\nPlease update to "+ Main.config.connection.minimum_version_name+" or higher to join servers!", NamedTextColor.RED)
+                    Component.text("You are on an older version of Minecraft!\nYou will not be able to join any restricted servers.\nPlease update to "+ Main.config.connection.getMinimumVersionName()+" or higher to join servers!", NamedTextColor.RED)
             );
         } else if (!hasCompatibleClient) {
             plr.sendMessage(
