@@ -77,6 +77,7 @@ public class Initialiser {
         setupEventHandler(events, new PlayerMoving());
         setupEventHandler(events, new PlayerCombat());
         setupEventHandler(events, new PlayerRespawn());
+        setupEventHandler(events, new PlayerHunger());
     }
 
     public void setupCommands() {
