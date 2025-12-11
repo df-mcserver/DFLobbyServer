@@ -30,7 +30,7 @@ favicon_path = "icon.png"
 [proxy]
 proxy = "none"
 secret = ""
-messaging_channel = "BungeeCord"
+messaging_channel = "bungeecord:main"
 expect_channel_response = false
 # checks the incompatibility of the client and the real protocol version
 # before the player is allowed to join other servers
