@@ -26,22 +26,28 @@ online = true
 [proxy]
 proxy = "none"
 secret = ""
+messaging_channel = "BungeeCord"
+expect_channel_response = false
+
+[lobby]
+spawn = {x = 0.0, y = 100.0, z = 0.0}
+world = "worlds/world"
 
 [minigames.parkour]
 enabled = true
-respawn = {x = 86.5, y = 2.0, z = 53.5, yaw = 90.0, pitch = 0.0}
+respawn = {x = 0.0, y = 0.0, z = 0.0, yaw = 0.0, pitch = 0.0}
 
-[nether]
+[minigames.nether]
 enabled = false
 world = "worlds/world_nether"
+combat_enabled = false
+portal_in_nether_location = {x = 0.0, y = 0.0, z = 0.0}
+portal_in_overworld_location = {x = 0.0, y = 0.0, z = 0.0}
 spawn_location = {x = 0.0, y = 0.0, z = 0.0}
 portal_location = {x = 0.0, y = 0.0, z = 0.0}
 
-[server]
-spawn = {x = 119.5, y = 2.0, z = 53.5}
-world = "worlds/world"
-
-    [[server.servers]]
+[servers]
+    [[servers.servers]]
     name = "UnrestrictedExample"
     server = "example0"
     unrestricted = true
@@ -53,14 +59,17 @@ world = "worlds/world"
 #    server = "example1"
 #    unrestricted = true
 
-    [[server.servers]]
+    [[servers.servers]]
     entity = "zombie"
     name = "RestrictedExample"
     position = {x = 118.5, y = 4.0, z = 73.5, yaw = 180.0}
     server = "example2"
 
-    [[server.servers]]
+    [[servers.servers]]
     entity = "bamboo_raft"
     name = ""
     server = "example3_noname"
     position = {x = 102.0, y = 1.2, z = 55.0, yaw = 180.0}
+
+[admins]
+by_username = ["realusernamethatmojang100%allowsyoutohaveanduseinminecraftjavaeditiontrust"]

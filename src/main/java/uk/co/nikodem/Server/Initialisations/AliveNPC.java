@@ -3,7 +3,6 @@ package uk.co.nikodem.Server.Initialisations;
 import net.minestom.server.entity.Entity;
 import org.jspecify.annotations.Nullable;
 import uk.co.nikodem.Config.Config;
-import uk.co.nikodem.Config.Types.Server;
 
 import java.util.ArrayList;
 import java.util.List;

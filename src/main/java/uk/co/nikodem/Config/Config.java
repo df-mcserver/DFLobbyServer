@@ -3,6 +3,7 @@ package uk.co.nikodem.Config;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +44,8 @@ public class Config {
     public static class Proxy {
         private String proxy = "";
         private String secret = "";
-        private String messagingChannel = "";
-        private Boolean expectChannelResponse = false;
+        private String messaging_channel = "";
+        private Boolean expect_channel_response = false;
 
         public String getProxy() {
             return proxy;
@@ -53,10 +54,10 @@ public class Config {
             return secret;
         }
         public String getMessagingChannel() {
-            return messagingChannel;
+            return messaging_channel;
         }
         public Boolean getExpectsChannelResponse() {
-            return expectChannelResponse;
+            return expect_channel_response;
         }
     }
 
@@ -75,13 +76,13 @@ public class Config {
     public static class Servers {
 
         public static class ServerInformation {
-            private EntityType entity = null;
+            private String entity = null;
             private Pos position = null;
             private String server = null;
             private String name = null;
             private Boolean unrestricted = false;
 
-            public static ServerInformation create(EntityType type, Pos position, String server, String name, boolean unrestricted) {
+            public static ServerInformation create(String type, Pos position, String server, String name, boolean unrestricted) {
                 ServerInformation npc = new ServerInformation();
                 npc.unrestricted = unrestricted;
                 npc.position = position;
@@ -91,8 +92,15 @@ public class Config {
                 return npc;
             }
 
-            public EntityType getEntityType() {
+            public String getEntityTypeName() {
                 return entity;
+            }
+            public @Nullable EntityType getEntityType() {
+                // not the most efficient lol
+                for (EntityType type : EntityType.values()) {
+                    if (type.key().value().equalsIgnoreCase(entity)) return type;
+                }
+                return null;
             }
             public Pos getPosition() {
                 return position;
@@ -133,10 +141,10 @@ public class Config {
             private String world = "world_nether";
             private Boolean enabled = false;
             private Boolean combatEnabled = false;
-            private Pos portalInNetherLocation = null;
-            private Pos portalInOverworldLocation = null;
-            private Pos combatZonePoint1 = null;
-            private Pos combatZonePoint2 = null;
+            private Pos portal_in_nether_location = null;
+            private Pos portal_in_overworld_location = null;
+            private Pos combat_zone_point1 = null;
+            private Pos combat_zone_point2 = null;
 
             public String getWorldName() {
                 return world;
@@ -148,16 +156,16 @@ public class Config {
                 return combatEnabled;
             }
             public Pos getPortalInNetherLocation() {
-                return portalInNetherLocation;
+                return portal_in_nether_location;
             }
             public Pos getPortalInOverworldLocation() {
-                return portalInOverworldLocation;
+                return portal_in_overworld_location;
             }
             public Pos getCombatZonePoint1() {
-                return combatZonePoint1;
+                return combat_zone_point1;
             }
             public Pos getCombatZonePoint2() {
-                return combatZonePoint2;
+                return combat_zone_point2;
             }
         }
 
@@ -166,13 +174,13 @@ public class Config {
     }
 
     public static class Admins {
-        private List<String> byUsername = new ArrayList<>();
+        private List<String> by_username = new ArrayList<>();
 
         public List<String> getByUsername() {
-            return byUsername;
+            return by_username;
         }
         public boolean isPlayerAnAdmin(Player plr) {
-            return byUsername.contains(plr.getUsername());
+            return by_username.contains(plr.getUsername());
         }
     }
 
