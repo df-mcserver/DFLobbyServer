@@ -25,9 +25,8 @@ public class ConfigManager {
     }
 
     public boolean getIsValidConfiguration() {
-        Path source;
         try {
-            source = getConfigFilePath();
+            getConfigFilePath();
         } catch (URISyntaxException e) {
             return false;
         }
@@ -36,8 +35,7 @@ public class ConfigManager {
     }
 
     public Path getConfigFilePath() throws URISyntaxException, NullPointerException {
-        Path path = Path.of(configName);
-        return path;
+        return Path.of(configName);
     }
 
     public Config update() {

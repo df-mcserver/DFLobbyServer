@@ -7,13 +7,15 @@ compression_threshold = 0
 # set to -1 to disable, requires player_validation to be enabled
 minimum_protocol_version = -1
 minimum_version_name = ""
-# checks the incompatibility of the client and the real protocol version
-# before the player is allowed to join other servers
-# requires df:proxy channel to be used (or DFProxyPlugin)
-player_validation = false
 # set whether the server should authenticate with mojang servers
 # required for proxy support
 online = true
+
+[ping]
+motd = "<green>DFLobbyServer"
+fake_max_players = -1
+show_online_players = true
+favicon_path = "icon.png"
 
 # settings for proxy connection
 # "proxy" can be one of the following
@@ -28,6 +30,10 @@ proxy = "none"
 secret = ""
 messaging_channel = "BungeeCord"
 expect_channel_response = false
+# checks the incompatibility of the client and the real protocol version
+# before the player is allowed to join other servers
+# requires df:proxy channel to be used (or DFProxyPlugin)
+player_validation = false
 
 [lobby]
 spawn = {x = 0.0, y = 100.0, z = 0.0}

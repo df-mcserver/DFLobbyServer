@@ -11,33 +11,49 @@ import java.util.List;
 public class Config {
     public static class Connection {
         private String address = "0.0.0.0";
-        private int port = 25565;
-        private int compression_threshold = 0;
-        private boolean online = true;
-        private boolean player_validation = true;
-        private int minimum_protocol_version = 0;
+        private Integer port = 25565;
+        private Integer compression_threshold = 0;
+        private Boolean online = true;
+        private Integer minimum_protocol_version = 0;
         private String minimum_version_name = "";
 
         public String getAddress() {
             return address;
         }
-        public int getPort() {
+        public Integer getPort() {
             return port;
         }
-        public int getCompressionThreshold() {
+        public Integer getCompressionThreshold() {
             return compression_threshold;
         }
-        public boolean isOnline() {
+        public Boolean isOnline() {
             return online;
         }
-        public boolean doPlayerValidation() {
-            return player_validation;
-        }
-        public int getMinimumProtocolVersion() {
+        public Integer getMinimumProtocolVersion() {
             return minimum_protocol_version;
         }
         public String getMinimumVersionName() {
             return minimum_version_name;
+        }
+    }
+
+    public static class Ping {
+        private String motd = "DFLobbyServer";
+        private Integer fake_max_players = -1;
+        private Boolean show_online_players = true;
+        private String favicon_path = null;
+
+        public String getMotd() {
+            return motd;
+        }
+        public Integer getFakeMaxPlayers() {
+            return fake_max_players;
+        }
+        public Boolean shouldShowOnlinePlayers() {
+            return show_online_players;
+        }
+        public @Nullable String getFaviconPath() {
+            return favicon_path;
         }
     }
 
@@ -46,6 +62,7 @@ public class Config {
         private String secret = "";
         private String messaging_channel = "";
         private Boolean expect_channel_response = false;
+        private Boolean player_validation = true;
 
         public String getProxy() {
             return proxy;
@@ -58,6 +75,9 @@ public class Config {
         }
         public Boolean getExpectsChannelResponse() {
             return expect_channel_response;
+        }
+        public Boolean doPlayerValidation() {
+            return player_validation;
         }
     }
 
@@ -175,6 +195,7 @@ public class Config {
     }
 
     public Connection connection = new Connection();
+    public Ping ping = new Ping();
     public Proxy proxy = new Proxy();
     public Lobby lobby = new Lobby();
     public Servers servers = new Servers();

@@ -23,6 +23,7 @@ import uk.co.nikodem.Events.Entities.PlayerInteract;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Events.Players.*;
 import uk.co.nikodem.Events.Plugins.PluginMessage;
+import uk.co.nikodem.Events.Server.ServerPing;
 import uk.co.nikodem.Main;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
@@ -78,6 +79,8 @@ public class Initialiser {
         setupEventHandler(events, new PlayerCombat());
         setupEventHandler(events, new PlayerRespawn());
         setupEventHandler(events, new PlayerHunger());
+
+        setupEventHandler(events, new ServerPing());
     }
 
     public void setupCommands() {

@@ -45,7 +45,7 @@ public class PlayerJoining implements EventHandler {
                     new ServerLinksPacket.Entry(Component.text("Join the discord server!"), "https://discord.gg/SpukTa6jBf")
             ));
 
-            if (Main.config.connection.doPlayerValidation()) {
+            if (Main.config.proxy.doPlayerValidation()) {
                 if (PlayerValidation.playerFinishedValidation(player)) return;
                 Main.logger.log("Players", "Attempting to validate "+player.getUsername());
                 BungeecordAbstractions.sendIncompatibleClientMessage(player);
