@@ -62,9 +62,9 @@ public class Main {
         Boolean success = false;
 
         // initialise proxy
-        switch (config.proxy.getProxy()) {
-            case "velocity":
+        switch (config.proxy.getProxy().toLowerCase()) {
             case "gate":
+            case "velocity":
                 if (config.connection.isOnline()) {
                     logger.error("Proxy", "Proxy server support for \""+config.proxy.getProxy()+"\" cannot be enabled, because online mode is enabled!");
                     logger.warn("Proxy", "Defaulting to offline authentication!");
@@ -80,6 +80,12 @@ public class Main {
                     logger.error("Proxy", "Velocity support not enabled, invalid secret given!");
                 }
 
+                break;
+            case "bungee":
+            case "bungeecord":
+                Main.server = MinecraftServer.init(new Auth.Bungee());
+                logger.log("Proxy", "Bungeecord support enabled!");
+                success = true;
                 break;
             default:
                 if (config.connection.isOnline()) Main.server = MinecraftServer.init(new Auth.Online());

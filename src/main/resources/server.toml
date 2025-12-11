@@ -23,6 +23,9 @@ favicon_path = "icon.png"
 #  -  connects to the velocity proxy.
 #  -  requires "secret" to be set.
 #  -  required "online" to be set to "false" in "connection"
+# - "bungeecord" or "bungee"
+#  -  connects to a bungeecord proxy.
+#  -  may also be required for velocity proxies using the legacy forwarding mode
 # - "none"
 #  -  no proxy.
 [proxy]
