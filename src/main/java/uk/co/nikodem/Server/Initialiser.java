@@ -19,6 +19,7 @@ import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
 import uk.co.nikodem.Commands.World.ExitEditWorldCommand;
 import uk.co.nikodem.Commands.World.SaveWorldCommand;
+import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Events.Entities.PlayerInteract;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Events.Players.*;
