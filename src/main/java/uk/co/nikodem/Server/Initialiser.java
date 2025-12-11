@@ -5,6 +5,7 @@ import io.github.togar2.pvp.feature.CombatFeatureSet;
 import io.github.togar2.pvp.feature.CombatFeatures;
 import io.github.togar2.pvp.utils.CombatVersion;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.minestom.server.MinecraftServer;
 import net.minestom.server.advancements.*;
 import net.minestom.server.event.GlobalEventHandler;
@@ -31,6 +32,7 @@ import uk.co.nikodem.Main;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
 
+import java.util.Iterator;
 import java.util.Objects;
 
 import static uk.co.nikodem.Main.*;
@@ -45,9 +47,9 @@ public class Initialiser {
         collectivelySetupEventHandlers();
         setupScheduler();
         setupCommands();
-        setupBlocks();
         setupPVP();
         addEasterEggAdvancement();
+        setupBlocks();
 
         startServer();
     }
@@ -67,10 +69,7 @@ public class Initialiser {
     }
 
     public void setupBlocks() {
-        RegistryTag<@NotNull Block> tag = Block.staticRegistry().getTag(TagKey.ofHash("#minecraft:all_signs"));
-        for (RegistryKey<@NotNull Block> key : Objects.requireNonNull(tag)) {
-            MinecraftServer.getBlockManager().registerHandler(key.key(), SignHandler::new);
-        }
+        MinecraftServer.getBlockManager().registerHandler("minecraft:sign", SignHandler::new);
     }
 
     public void collectivelySetupEventHandlers() {
@@ -95,6 +94,8 @@ public class Initialiser {
         MinecraftServer.getCommandManager().register(new SaveWorldCommand());
 
         MinecraftServer.getCommandManager().register(new SetBlockCommand());
+
+        MinecraftServer.getCommandManager().setUnknownCommandCallback((sender, command) -> sender.sendMessage(Component.text("Unknown command!", NamedTextColor.RED)));
     }
 
     public void setServerVariables() {
