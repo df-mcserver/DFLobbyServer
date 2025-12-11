@@ -82,16 +82,6 @@ public class Config {
             private String name = null;
             private Boolean unrestricted = false;
 
-            public static ServerInformation create(String type, Pos position, String server, String name, boolean unrestricted) {
-                ServerInformation npc = new ServerInformation();
-                npc.unrestricted = unrestricted;
-                npc.position = position;
-                npc.server = server;
-                npc.entity = type;
-                npc.name = name;
-                return npc;
-            }
-
             public String getEntityTypeName() {
                 return entity;
             }
@@ -140,7 +130,7 @@ public class Config {
         public static class Nether {
             private String world = "world_nether";
             private Boolean enabled = false;
-            private Boolean combatEnabled = false;
+            private Boolean combat_enabled = false;
             private Pos portal_in_nether_location = null;
             private Pos portal_in_overworld_location = null;
             private Pos combat_zone_point1 = null;
@@ -153,7 +143,7 @@ public class Config {
                 return enabled;
             }
             public Boolean isCombatEnabled() {
-                return combatEnabled;
+                return combat_enabled;
             }
             public Pos getPortalInNetherLocation() {
                 return portal_in_nether_location;

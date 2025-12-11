@@ -20,7 +20,7 @@ online = true
 # - "velocity" or "gate"
 #  -  connects to the velocity proxy.
 #  -  requires "secret" to be set.
-#  -  required "online" to be turned on in "connection"
+#  -  required "online" to be set to "false" in "connection"
 # - "none"
 #  -  no proxy.
 [proxy]
