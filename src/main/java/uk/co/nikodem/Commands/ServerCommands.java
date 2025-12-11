@@ -11,7 +11,6 @@ import uk.co.nikodem.Config.Types.Server;
 import uk.co.nikodem.Main;
 import uk.co.nikodem.Proxy.PlayerSender;
 
-import javax.print.DocFlavor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;

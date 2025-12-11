@@ -9,9 +9,9 @@ import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.Scheduler;
 import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Server.Initialisations.Entities;
+import uk.co.nikodem.Server.Initialisations.Generation;
 import uk.co.nikodem.Server.Initialiser;
 import uk.co.nikodem.Utils.Logger;
-import uk.co.nikodem.Server.Initialisations.Generation;
 
 public class Main {
     public static Logger logger = new Logger();

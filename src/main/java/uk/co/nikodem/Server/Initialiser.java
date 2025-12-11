@@ -11,16 +11,11 @@ import net.minestom.server.advancements.*;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.instance.InstanceManager;
-import net.minestom.server.instance.block.Block;
 import net.minestom.server.item.Material;
-import net.minestom.server.registry.RegistryKey;
-import net.minestom.server.registry.RegistryTag;
-import net.minestom.server.registry.TagKey;
 import net.minestom.server.world.DimensionType;
-import org.jetbrains.annotations.NotNull;
 import uk.co.nikodem.Blocks.Handlers.SignHandler;
-import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.ServerCommands;
+import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
 import uk.co.nikodem.Commands.World.ExitEditWorldCommand;
 import uk.co.nikodem.Commands.World.SaveWorldCommand;
@@ -32,10 +27,8 @@ import uk.co.nikodem.Main;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
 
-import java.util.Iterator;
-import java.util.Objects;
-
-import static uk.co.nikodem.Main.*;
+import static uk.co.nikodem.Main.config;
+import static uk.co.nikodem.Main.logger;
 
 public class Initialiser {
     public void Initialise() {
