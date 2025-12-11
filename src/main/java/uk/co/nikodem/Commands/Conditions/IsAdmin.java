@@ -10,7 +10,7 @@ public class IsAdmin implements CommandCondition {
     @Override
     public boolean canUse(CommandSender commandSender, @Nullable String s) {
         if (commandSender instanceof Player plr) {
-            return Main.config.isPlayerAnAdmin(plr);
+            return Main.config.admins.isPlayerAnAdmin(plr);
         }
         return true;
     }

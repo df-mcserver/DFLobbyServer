@@ -4,7 +4,6 @@ import com.moandjiezana.toml.Toml;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import org.jspecify.annotations.Nullable;
 import uk.co.nikodem.Main;
 
 import java.io.File;
@@ -17,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ConfigManager {
+    private final String configName = "server.toml";
+
     public boolean getExists() {
         Path source;
         try {
@@ -43,36 +44,36 @@ public class ConfigManager {
         Path path = Path.of(configName);
         return path;
     }
-
-    public Double getCheckedDouble(Toml config, String key, Double defaultValue) {
-        try {
-            Double val = config.getDouble(key);
-            return val == null ? defaultValue : val;
-        } catch (NullPointerException e) {
-            return defaultValue;
-        }
-    }
-
-    public Float getCheckedFloat(Toml config, String key, Float defaultValue) {
-        try {
-            Double val = config.getDouble(key);
-            return val == null ? defaultValue : val.floatValue();
-        } catch (NullPointerException e) {
-            return defaultValue;
-        }
-    }
-
-    public Pos getCheckedPos(Toml config, String key, @Nullable Pos defaultValue) {
-        Toml pos = config.getTable(key);
-        if (defaultValue == null) defaultValue = new Pos(0, 0, 0);
-        Double x = getCheckedDouble(pos,"x", defaultValue.x());
-        Double y = getCheckedDouble(pos,"y", defaultValue.y());
-        Double z = getCheckedDouble(pos,"z", defaultValue.z());
-        float yaw = getCheckedFloat(pos,"yaw", defaultValue.yaw());
-        float pitch = getCheckedFloat(pos,"pitch", defaultValue.pitch());
-
-        return new Pos(x, y, z, yaw, pitch);
-    }
+//
+//    public Double getCheckedDouble(Toml config, String key, Double defaultValue) {
+//        try {
+//            Double val = config.getDouble(key);
+//            return val == null ? defaultValue : val;
+//        } catch (NullPointerException e) {
+//            return defaultValue;
+//        }
+//    }
+//
+//    public Float getCheckedFloat(Toml config, String key, Float defaultValue) {
+//        try {
+//            Double val = config.getDouble(key);
+//            return val == null ? defaultValue : val.floatValue();
+//        } catch (NullPointerException e) {
+//            return defaultValue;
+//        }
+//    }
+//
+//    public Pos getCheckedPos(Toml config, String key, @Nullable Pos defaultValue) {
+//        Toml pos = config.getTable(key);
+//        if (defaultValue == null) defaultValue = new Pos(0, 0, 0);
+//        Double x = getCheckedDouble(pos,"x", defaultValue.x());
+//        Double y = getCheckedDouble(pos,"y", defaultValue.y());
+//        Double z = getCheckedDouble(pos,"z", defaultValue.z());
+//        float yaw = getCheckedFloat(pos,"yaw", defaultValue.yaw());
+//        float pitch = getCheckedFloat(pos,"pitch", defaultValue.pitch());
+//
+//        return new Pos(x, y, z, yaw, pitch);
+//    }
 
     public void update() {
         try {
@@ -162,9 +163,5 @@ public class ConfigManager {
         }
 
         return true;
-    }
-
-    public boolean isPlayerAnAdmin(Player plr) {
-        return admins.byUsername.contains(plr.getUsername());
     }
 }

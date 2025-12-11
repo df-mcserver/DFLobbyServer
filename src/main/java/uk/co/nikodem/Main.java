@@ -64,18 +64,18 @@ public class Main {
         Boolean success = false;
 
         // initialise proxy
-        switch (config.proxy.proxy) {
+        switch (config.proxy.getProxy()) {
             case "velocity":
             case "gate":
-                if (config.connection.online) {
-                    logger.error("Proxy", "Proxy server support for \""+config.proxy.proxy+"\" cannot be enabled, because online mode is enabled!");
+                if (config.connection.isOnline()) {
+                    logger.error("Proxy", "Proxy server support for \""+config.proxy.getProxy()+"\" cannot be enabled, because online mode is enabled!");
                     logger.warn("Proxy", "Defaulting to offline authentication!");
                     Main.server = MinecraftServer.init(new Auth.Offline());
                     success = true;
                     break;
                 }
                 try {
-                    Main.server = MinecraftServer.init(new Auth.Velocity(config.proxy.secret));
+                    Main.server = MinecraftServer.init(new Auth.Velocity(config.proxy.getSecret()));
                     logger.log("Proxy", "Velocity support enabled!");
                     success = true;
                 } catch (IllegalArgumentException e) {
@@ -84,7 +84,7 @@ public class Main {
 
                 break;
             default:
-                if (config.connection.online) Main.server = MinecraftServer.init(new Auth.Online());
+                if (config.connection.isOnline()) Main.server = MinecraftServer.init(new Auth.Online());
                 else Main.server = MinecraftServer.init(new Auth.Offline());
                 success = true;
                 break;

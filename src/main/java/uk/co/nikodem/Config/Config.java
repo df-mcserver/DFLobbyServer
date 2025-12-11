@@ -1,32 +1,21 @@
 package uk.co.nikodem.Config;
 
-import com.moandjiezana.toml.Toml;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
-import org.jspecify.annotations.Nullable;
-import uk.co.nikodem.Main;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Config {
-    private final String configName = "server.toml";
-
     public static class Connection {
-        public String address = "0.0.0.0";
-        public int port = 25565;
-        public int compression_threshold = 0;
-        public boolean online = true;
-        public boolean player_validation = true;
-        public int minimum_protocol_version = 0;
-        public String minimum_version_name = "";
+        private String address = "0.0.0.0";
+        private int port = 25565;
+        private int compression_threshold = 0;
+        private boolean online = true;
+        private boolean player_validation = true;
+        private int minimum_protocol_version = 0;
+        private String minimum_version_name = "";
 
         public String getAddress() {
             return address;
@@ -34,7 +23,7 @@ public class Config {
         public int getPort() {
             return port;
         }
-        public int getCompression_threshold() {
+        public int getCompressionThreshold() {
             return compression_threshold;
         }
         public boolean isOnline() {
@@ -43,19 +32,19 @@ public class Config {
         public boolean doPlayerValidation() {
             return player_validation;
         }
-        public int getMinimum_protocol_version() {
+        public int getMinimumProtocolVersion() {
             return minimum_protocol_version;
         }
-        public String getMinimum_version_name() {
+        public String getMinimumVersionName() {
             return minimum_version_name;
         }
     }
 
     public static class Proxy {
-        public String proxy = "";
-        public String secret = "";
-        public String messagingChannel = "";
-        public Boolean expectChannelResponse = false;
+        private String proxy = "";
+        private String secret = "";
+        private String messagingChannel = "";
+        private Boolean expectChannelResponse = false;
 
         public String getProxy() {
             return proxy;
@@ -71,14 +60,26 @@ public class Config {
         }
     }
 
+    public static class Lobby {
+        private String world = "world";
+        private Pos spawn = new Pos(0, 40, 0);
+
+        public String getWorldName() {
+            return world;
+        }
+        public Pos getSpawnLocation() {
+            return spawn;
+        }
+    }
+
     public static class Servers {
 
         public static class ServerInformation {
-            public EntityType entity = null;
-            public Pos position = null;
-            public String server = null;
-            public String name = null;
-            public Boolean unrestricted = false;
+            private EntityType entity = null;
+            private Pos position = null;
+            private String server = null;
+            private String name = null;
+            private Boolean unrestricted = false;
 
             public static ServerInformation create(EntityType type, Pos position, String server, String name, boolean unrestricted) {
                 ServerInformation npc = new ServerInformation();
@@ -107,16 +108,9 @@ public class Config {
             }
         }
 
-        public String world = "world";
-        public Pos spawn = new Pos(0, 40, 0);
-        public List<ServerInformation> servers = new ArrayList<>();
 
-        public String getWorldName() {
-            return world;
-        }
-        public Pos getSpawnLocation() {
-            return spawn;
-        }
+        private List<ServerInformation> servers = new ArrayList<>();
+
         public List<ServerInformation> getServers() {
             return servers;
         }
@@ -124,8 +118,8 @@ public class Config {
 
     public static class Minigames {
         public static class Parkour {
-            public Boolean enabled = false;
-            public Pos respawn = null;
+            private Boolean enabled = false;
+            private Pos respawn = null;
 
             public Boolean isEnabled() {
                 return enabled;
@@ -136,13 +130,13 @@ public class Config {
         }
 
         public static class Nether {
-            public String world = "world_nether";
-            public Boolean enabled = false;
-            public Boolean combatEnabled = false;
-            public Pos portalInNetherLocation = null;
-            public Pos portalInOverworldLocation = null;
-            public Pos combatZonePoint1 = null;
-            public Pos combatZonePoint2 = null;
+            private String world = "world_nether";
+            private Boolean enabled = false;
+            private Boolean combatEnabled = false;
+            private Pos portalInNetherLocation = null;
+            private Pos portalInOverworldLocation = null;
+            private Pos combatZonePoint1 = null;
+            private Pos combatZonePoint2 = null;
 
             public String getWorldName() {
                 return world;
@@ -166,13 +160,26 @@ public class Config {
                 return combatZonePoint2;
             }
         }
+
+        public Parkour parkour = new Parkour();
+        public Nether nether = new Nether();
     }
 
     public static class Admins {
-        public List<String> byUsername = new ArrayList<>();
+        private List<String> byUsername = new ArrayList<>();
 
         public List<String> getByUsername() {
             return byUsername;
         }
+        public boolean isPlayerAnAdmin(Player plr) {
+            return byUsername.contains(plr.getUsername());
+        }
     }
+
+    public Connection connection = new Connection();
+    public Proxy proxy = new Proxy();
+    public Lobby lobby = new Lobby();
+    public Servers servers = new Servers();
+    public Minigames minigames = new Minigames();
+    public Admins admins = new Admins();
 }

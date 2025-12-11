@@ -20,13 +20,13 @@ public class PlayerMoving implements EventHandler {
         eventHandler.addListener(PlayerMoveEvent.class, event -> {
             Player plr = event.getPlayer();
 
-            if (plr.getPosition().y() < -70) plr.setInstance(Main.container, Main.config.server.spawn);
+            if (plr.getPosition().y() < -70) plr.setInstance(Main.container, Main.config.lobby.getSpawnLocation());
 
-            if (plr.getInstance().getDimensionType() == DimensionType.THE_NETHER && Main.config.nether.pvpEnabled)
+            if (plr.getInstance().getDimensionType() == DimensionType.THE_NETHER && Main.config.minigames.nether.isCombatEnabled())
                 PlayerCombat.playerZoneCheck(isIsInZone(plr), plr);
 
             if (plr.getInstance().getBlock(event.getNewPosition()).equals(Block.NETHER_PORTAL)) {
-                boolean is_allowed = Main.config.nether.enabled;
+                boolean is_allowed = Main.config.minigames.nether.isEnabled();
 
                 if (EditMode.isInEditMode(plr)) is_allowed = false;
                 if (Boolean.TRUE.equals(lastBlockWasPortal.get(plr.getUuid()))) is_allowed = false;
@@ -35,8 +35,8 @@ public class PlayerMoving implements EventHandler {
                 else lastBlockWasPortal.put(plr.getUuid(), true);
 
                 if (is_allowed) {
-                    if (plr.getInstance().getDimensionType() == DimensionType.OVERWORLD) plr.setInstance(Main.nether_container, Main.config.nether.spawnLocation);
-                    else plr.setInstance(Main.container, Main.config.nether.portalLocation);
+                    if (plr.getInstance().getDimensionType() == DimensionType.OVERWORLD) plr.setInstance(Main.nether_container, Main.config.minigames.nether.getPortalInNetherLocation());
+                    else plr.setInstance(Main.container, Main.config.minigames.nether.getPortalInOverworldLocation());
                 }
             } else {
                 if (lastBlockWasPortal.containsKey(plr.getUuid())) lastBlockWasPortal.replace(plr.getUuid(), false);
@@ -51,13 +51,13 @@ public class PlayerMoving implements EventHandler {
         double plrY = plr.getPosition().y();
         double plrZ = plr.getPosition().z();
 
-        double p1X = Main.config.nether.pvpZonePoint1.x();
-        double p1Y = Main.config.nether.pvpZonePoint1.y();
-        double p1Z = Main.config.nether.pvpZonePoint1.z();
+        double p1X = Main.config.minigames.nether.getCombatZonePoint1().x();
+        double p1Y = Main.config.minigames.nether.getCombatZonePoint1().y();
+        double p1Z = Main.config.minigames.nether.getCombatZonePoint1().z();
 
-        double p2X = Main.config.nether.pvpZonePoint2.x();
-        double p2Y = Main.config.nether.pvpZonePoint2.y();
-        double p2Z = Main.config.nether.pvpZonePoint2.z();
+        double p2X = Main.config.minigames.nether.getCombatZonePoint2().x();
+        double p2Y = Main.config.minigames.nether.getCombatZonePoint2().y();
+        double p2Z = Main.config.minigames.nether.getCombatZonePoint2().z();
 
         boolean isX = ((plrX >= Math.min(p1X, p2X)) && (plrX < Math.max(p1X, p2X)));
         boolean isY = ((plrY >= Math.min(p1Y, p2Y)) && (plrY < Math.max(p1Y, p2Y)));

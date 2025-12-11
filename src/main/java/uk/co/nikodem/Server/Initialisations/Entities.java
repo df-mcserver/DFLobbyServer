@@ -3,7 +3,7 @@ package uk.co.nikodem.Server.Initialisations;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.minestom.server.entity.Entity;
 import net.minestom.server.instance.InstanceContainer;
-import uk.co.nikodem.Config.Types.Server;
+import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Main;
 
 import java.util.Objects;
@@ -11,14 +11,14 @@ import java.util.Objects;
 public class Entities {
     @SuppressWarnings("deprecation") // entity.setCustomName() is deprecated for some reason
     public void spawnNPCs(InstanceContainer container) {
-        for (Server server : Main.config.server.servers) {
-            if (server.entity == null) continue;
-            Entity entity = new Entity(server.entity);
+        for (Config.Servers.ServerInformation server : Main.config.servers.getServers()) {
+            if (server.getEntityType() == null) continue;
+            Entity entity = new Entity(server.getEntityType());
 
-            if (!Objects.equals(server.name, "")) entity.setCustomName(MiniMessage.miniMessage().deserialize(server.name));
+            if (!Objects.equals(server.getDisplayName(), "")) entity.setCustomName(MiniMessage.miniMessage().deserialize(server.getDisplayName()));
             entity.setNoGravity(true);
-            entity.setInstance(container, server.position);
-            entity.setCustomNameVisible(!Objects.equals(server.name, ""));
+            entity.setInstance(container, server.getPosition());
+            entity.setCustomNameVisible(!Objects.equals(server.getDisplayName(), ""));
 
             AliveNPC.alive.add(
                     AliveNPC.create(
@@ -26,7 +26,7 @@ public class Entities {
                     )
             );
 
-            Main.logger.log("Servers", "Added NPC \""+server.name+"\" for server \""+server.server+"\" at position "+server.position+"!");
+            Main.logger.log("Servers", "Added NPC \""+server.getDisplayName()+"\" for server \""+server.getServerName()+"\" at position "+server.getPosition()+"!");
         }
     }
 }

@@ -19,7 +19,6 @@ import uk.co.nikodem.Commands.World.EditWorldCommand;
 import uk.co.nikodem.Commands.World.Editing.SetBlockCommand;
 import uk.co.nikodem.Commands.World.ExitEditWorldCommand;
 import uk.co.nikodem.Commands.World.SaveWorldCommand;
-import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Events.Entities.PlayerInteract;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Events.Players.*;
@@ -51,7 +50,7 @@ public class Initialiser {
     public void setupLobbyInstance() {
         InstanceContainer lobby_container = setupInstanceContainer(MinecraftServer.getInstanceManager());
         Main.container = lobby_container;
-        Main.generation = setupGeneration(lobby_container, config.server.world);
+        Main.generation = setupGeneration(lobby_container, config.lobby.getWorldName());
 
         setupEntities(lobby_container);
     }
@@ -59,7 +58,7 @@ public class Initialiser {
     public void setupNetherInstance() {
         InstanceContainer nether_container = setupNether(MinecraftServer.getInstanceManager());
         Main.nether_container = nether_container;
-        Main.nether_generation = setupGeneration(nether_container, config.nether.world);
+        Main.nether_generation = setupGeneration(nether_container, config.minigames.nether.getWorldName());
     }
 
     public void setupBlocks() {
@@ -95,7 +94,7 @@ public class Initialiser {
 
     public void setServerVariables() {
         MinecraftServer.setBrandName("DFLobbyServer");
-        MinecraftServer.setCompressionThreshold(Main.config.connection.compression_threshold);
+        MinecraftServer.setCompressionThreshold(Main.config.connection.getCompressionThreshold());
     }
 
     public InstanceContainer setupInstanceContainer(InstanceManager manager) {
@@ -103,8 +102,8 @@ public class Initialiser {
     }
 
     public void startServer() {
-        String addr = config.connection.address;
-        int port = config.connection.port;
+        String addr = config.connection.getAddress();
+        int port = config.connection.getPort();
 
         try {
             Main.server.start(addr, port);

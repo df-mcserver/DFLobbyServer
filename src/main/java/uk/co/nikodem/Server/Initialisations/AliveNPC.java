@@ -2,6 +2,7 @@ package uk.co.nikodem.Server.Initialisations;
 
 import net.minestom.server.entity.Entity;
 import org.jspecify.annotations.Nullable;
+import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Config.Types.Server;
 
 import java.util.ArrayList;
@@ -11,12 +12,12 @@ import java.util.UUID;
 public class AliveNPC {
     public static List<AliveNPC> alive = new ArrayList<>();
 
-    public Server npcinfo;
+    public Config.Servers.ServerInformation serverInformation;
     public UUID entity;
 
-    public static AliveNPC create(Server npcinfo, Entity entity) {
+    public static AliveNPC create(Config.Servers.ServerInformation serverInformation, Entity entity) {
         AliveNPC a = new AliveNPC();
-        a.npcinfo = npcinfo;
+        a.serverInformation = serverInformation;
         a.entity = entity.getUuid();
         return a;
     }
