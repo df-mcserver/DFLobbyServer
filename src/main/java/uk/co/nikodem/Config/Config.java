@@ -40,7 +40,6 @@ public class Config {
     public static class Ping {
         private String motd = "DFLobbyServer";
         private Integer fake_max_players = -1;
-        private Boolean show_online_players = true;
         private String favicon_path = null;
 
         public String getMotd() {
@@ -48,9 +47,6 @@ public class Config {
         }
         public Integer getFakeMaxPlayers() {
             return fake_max_players;
-        }
-        public Boolean shouldShowOnlinePlayers() {
-            return show_online_players;
         }
         public @Nullable String getFaviconPath() {
             return favicon_path;

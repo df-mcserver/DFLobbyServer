@@ -14,7 +14,6 @@ online = true
 [ping]
 motd = "<green>DFLobbyServer"
 fake_max_players = -1
-show_online_players = true
 favicon_path = "icon.png"
 
 # settings for proxy connection

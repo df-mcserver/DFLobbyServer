@@ -14,7 +14,7 @@ import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 import uk.co.nikodem.Events.EventHandler;
 import uk.co.nikodem.Main;
-import uk.co.nikodem.Proxy.BungeecordAbstractions;
+import uk.co.nikodem.Proxy.ProxyMessaging;
 import uk.co.nikodem.Proxy.PlayerValidation;
 
 public class PlayerJoining implements EventHandler {
@@ -48,9 +48,9 @@ public class PlayerJoining implements EventHandler {
             if (Main.config.proxy.doPlayerValidation()) {
                 if (PlayerValidation.playerFinishedValidation(player)) return;
                 Main.logger.log("Players", "Attempting to validate "+player.getUsername());
-                BungeecordAbstractions.sendIncompatibleClientMessage(player);
-                BungeecordAbstractions.sendRealProtocolVersionMessage(player);
-                BungeecordAbstractions.sendIsGeyserMessage(player);
+                ProxyMessaging.sendIncompatibleClientMessage(player);
+                ProxyMessaging.sendRealProtocolVersionMessage(player);
+                ProxyMessaging.sendIsGeyserMessage(player);
 
                 Main.scheduler.scheduleTask(() ->
                         {

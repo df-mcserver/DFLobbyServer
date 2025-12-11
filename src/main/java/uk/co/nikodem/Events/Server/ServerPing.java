@@ -33,14 +33,13 @@ public class ServerPing implements EventHandler {
 
         byte[] finalFavicon = favicon;
         eventHandler.addListener(ServerListPingEvent.class, event -> {
+            int onlinePlayers = MinecraftServer.getConnectionManager().getOnlinePlayerCount();
+
             event.setStatus(
                     Status.builder()
-                            .playerInfo(Status.PlayerInfo.builder()
-                                    .onlinePlayers(Main.config.ping.shouldShowOnlinePlayers() ? MinecraftServer.getConnectionManager().getOnlinePlayerCount() : 0)
-                                    .maxPlayers(Main.config.ping.getFakeMaxPlayers())
-                                    .build())
                             .description(MiniMessage.miniMessage().deserialize(Main.config.ping.getMotd()))
                             .favicon(finalFavicon)
+                            .playerInfo(onlinePlayers, Main.config.ping.getFakeMaxPlayers())
                             .build()
             );
         });

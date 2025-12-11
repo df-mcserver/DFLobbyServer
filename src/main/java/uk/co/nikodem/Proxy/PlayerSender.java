@@ -26,7 +26,7 @@ public class PlayerSender {
         if (getIsBeingSent(plr)) return;
         addPlayerBeingSent(plr);
         PlayerSender.informPlayer(plr, server);
-        BungeecordAbstractions.sendPlayerToServer(plr, server);
+        ProxyMessaging.sendPlayerToServer(plr, server);
 
         Main.scheduler.scheduleTask(() ->
                 {
