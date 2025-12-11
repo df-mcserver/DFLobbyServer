@@ -9,6 +9,7 @@ import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.AsyncPlayerConfigurationEvent;
 import net.minestom.server.event.player.PlayerLoadedEvent;
 import net.minestom.server.event.player.PlayerSkinInitEvent;
+import net.minestom.server.network.packet.server.common.ServerLinksPacket;
 import net.minestom.server.timer.ExecutionType;
 import net.minestom.server.timer.TaskSchedule;
 import uk.co.nikodem.Events.EventHandler;
@@ -39,6 +40,10 @@ public class PlayerJoining implements EventHandler {
             for (AdvancementTab tab : Main.advancementManager.getTabs()) {
                 tab.addViewer(player);
             }
+
+            player.sendPacket(new ServerLinksPacket(
+                    new ServerLinksPacket.Entry(Component.text("Join the discord server!"), "https://discord.gg/SpukTa6jBf")
+            ));
 
             if (Main.config.connection.player_validation) {
                 if (PlayerValidation.playerFinishedValidation(player)) return;
