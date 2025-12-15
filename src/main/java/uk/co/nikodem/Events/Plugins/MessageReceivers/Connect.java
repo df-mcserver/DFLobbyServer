@@ -7,7 +7,7 @@ import uk.co.nikodem.Main;
 import uk.co.nikodem.Proxy.PlayerSender;
 import uk.co.nikodem.Utils.StringHelper;
 
-public class ConnectStatus implements DFMessageReceiver {
+public class Connect implements DFMessageReceiver {
     @Override
     public void run(PlayerPluginMessageEvent event, String[] args) {
         Player plr = event.getPlayer();

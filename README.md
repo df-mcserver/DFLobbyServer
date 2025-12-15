@@ -8,10 +8,11 @@ A minimal lobby server written with [Minestom (1.21.8, 2025.10.05)](https://gith
 
 ## Configuration
 Configuration is done via the server.toml file, which is auto-generated upon first boot.  
-This server expects a pre-made lobby server, and has an optional nether world.
+This server expects a pre-made lobby world, and has an optional nether world.
 
 See [this file](src/main/resources/server.toml) for the automatically generated default configuration.
 
-## Dependencies
+## Soft Dependencies
 - DFProxyPlugin (should work without it)
    - for the proxy.expectChannelResponse setting, validating whether clients are considered "valid" and/or on bedrock
+   - this project makes use of the full [v0.0.0-INDEV spec](https://github.com/df-mcserver/DFProxyPlugin/blob/ef65355cbf245b5e3d89dfb4ac48a9ea04d9f5b9/PLUGIN_SPEC.md).

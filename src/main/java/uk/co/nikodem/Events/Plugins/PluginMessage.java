@@ -4,7 +4,7 @@ import net.minestom.server.entity.Player;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.event.player.PlayerPluginMessageEvent;
 import uk.co.nikodem.Events.EventHandler;
-import uk.co.nikodem.Events.Plugins.MessageReceivers.ConnectStatus;
+import uk.co.nikodem.Events.Plugins.MessageReceivers.Connect;
 import uk.co.nikodem.Events.Plugins.MessageReceivers.IncompatibleClient;
 import uk.co.nikodem.Events.Plugins.MessageReceivers.IsGeyser;
 import uk.co.nikodem.Events.Plugins.MessageReceivers.RealProtocolVersion;
@@ -35,7 +35,7 @@ public class PluginMessage implements EventHandler {
     public final HashMap<String, DFMessageReceiver> receivers = new HashMap<>();
 
     public PluginMessage() {
-        receivers.put("ConnectStatus", new ConnectStatus());
+        receivers.put("Connect", new Connect());
         receivers.put("IncompatibleClient", new IncompatibleClient());
         receivers.put("IsGeyser", new IsGeyser());
         receivers.put("RealProtocolVersion", new RealProtocolVersion());
