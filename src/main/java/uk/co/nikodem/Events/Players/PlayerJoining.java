@@ -24,7 +24,7 @@ public class PlayerJoining implements EventHandler {
             event.setSpawningInstance(Main.container);
             player.setRespawnPoint(Main.config.lobby.getSpawnLocation());
             player.setGameMode(Main.DEFAULT_GAMEMODE);
-            Main.logger.log("Players", player.getUsername()+" is connecting to the server...");
+            Main.logger.info("Players // {} is connecting to the server...", player.getUsername());
 
             String msg = player.getUsername()+" has joined the lobby";
 
@@ -32,7 +32,7 @@ public class PlayerJoining implements EventHandler {
                 plr.sendMessage(Component.text(msg, NamedTextColor.YELLOW));
             }
 
-            Main.logger.log("Players", msg);
+            Main.logger.info("Players // {}", msg);
         });
         eventHandler.addListener(PlayerLoadedEvent.class, event -> {
             Player player = event.getPlayer();
@@ -47,7 +47,7 @@ public class PlayerJoining implements EventHandler {
 
             if (Main.config.proxy.doPlayerValidation()) {
                 if (PlayerValidation.playerFinishedValidation(player)) return;
-                Main.logger.log("Players", "Attempting to validate "+player.getUsername());
+                Main.logger.info("Players // Attempting to validate {}", player.getUsername());
                 ProxyMessaging.sendIncompatibleClientMessage(player);
                 ProxyMessaging.sendRealProtocolVersionMessage(player);
                 ProxyMessaging.sendIsGeyserMessage(player);

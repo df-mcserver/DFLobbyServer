@@ -31,13 +31,13 @@ public class EditMode {
     }
 
     public static void saveWorld(Player plr) {
-        Main.logger.log("Edit", "World is being saved by "+plr.getUsername()+"!");
+        Main.logger.info("Edit // World is being saved by "+plr.getUsername()+"!");
         plr.getInstance().saveChunksToStorage();
         plr.sendMessage(Component.text("Successfully saved world!", NamedTextColor.LIGHT_PURPLE));
     }
 
     public static void enterEditMode(Player plr) {
-        Main.logger.log("Edit", plr.getUsername()+" is entering Edit mode!");
+        Main.logger.info("Edit // {} is entering Edit mode!", plr.getUsername());
         plr.setGameMode(GameMode.CREATIVE);
         plr.getInventory().clear();
         EditMode.addPlayer(plr);
@@ -45,7 +45,7 @@ public class EditMode {
     }
 
     public static void exitEditMode(Player plr) {
-        Main.logger.log("Edit", plr.getUsername()+" is exiting Edit mode!");
+        Main.logger.info("Edit // {} is exiting Edit mode!", plr.getUsername());
         plr.setGameMode(Main.DEFAULT_GAMEMODE);
         plr.getInventory().clear();
         EditMode.removePlayer(plr);

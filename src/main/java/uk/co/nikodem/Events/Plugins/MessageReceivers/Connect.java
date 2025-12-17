@@ -17,10 +17,10 @@ public class Connect implements DFMessageReceiver {
             if (status.equals("false")) {
                 PlayerSender.informPlayerError(plr);
                 PlayerSender.removePlayerBeingSent(plr);
-                Main.logger.warn("Plugin", "Player \""+plr.getUsername()+"\" failed to teleport!");
+                Main.logger.warn("Plugin // Player \"{}\" failed to teleport!", plr.getUsername());
                 return;
             }
-            Main.logger.log("Plugin", "Player \""+plr.getUsername()+"\" successfully teleported!");
+            Main.logger.info("Plugin // Player \"{}\" successfully teleported!", plr.getUsername());
         }
     }
 }

@@ -7,15 +7,16 @@ import net.minestom.server.entity.GameMode;
 import net.minestom.server.event.GlobalEventHandler;
 import net.minestom.server.instance.InstanceContainer;
 import net.minestom.server.timer.Scheduler;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import uk.co.nikodem.Config.Config;
 import uk.co.nikodem.Config.ConfigManager;
 import uk.co.nikodem.Server.Initialisations.Entities;
 import uk.co.nikodem.Server.Initialisations.Generation;
 import uk.co.nikodem.Server.Initialiser;
-import uk.co.nikodem.Utils.Logger;
 
 public class Main {
-    public static Logger logger = new Logger();
+    public static Logger logger = LoggerFactory.getLogger(Main.class);
     public static Config config = new Config();
     public static ConfigManager manager = new ConfigManager();
 
@@ -37,54 +38,54 @@ public class Main {
 
     public static void main(String[] args) {
         // load configuration
-        logger.log("Main", "Beginning execution!");
+        logger.info("Main // Beginning execution!");
 
         if (!manager.getExists()) {
-            logger.warn("Config", "Configuration doesn't exist! Creating now..");
+            logger.warn("Config // Configuration doesn't exist! Creating now..");
 
-            if (manager.create()) logger.log("Config", "Created new configuration!");
-            else logger.error("Config", "Failed to create new configuration!");
+            if (manager.create()) logger.info("Config // Created new configuration!");
+            else logger.error("Config // Failed to create new configuration!");
 
             config = manager.update();
         } else {
             if (!manager.getIsValidConfiguration()) {
-                logger.error("Config", "Invalid configuration!");
+                logger.error("Config // Invalid configuration!");
                 return;
             }
 
             config = manager.update();
 
-            logger.log("Config", "Loaded valid configuration.");
+            logger.info("Config // Loaded valid configuration.");
         }
 
-        logger.log("Main", "Initialising Minecraft server..");
+        logger.info("Main // Initialising Minecraft server..");
 
-        Boolean success = false;
+        boolean success = false;
 
         // initialise proxy
         switch (config.proxy.getProxy().toLowerCase()) {
             case "gate":
             case "velocity":
                 if (config.connection.isOnline()) {
-                    logger.error("Proxy", "Proxy server support for \""+config.proxy.getProxy()+"\" cannot be enabled, because online mode is enabled!");
-                    logger.warn("Proxy", "Defaulting to offline authentication!");
+                    logger.error("Proxy // Proxy server support for \""+config.proxy.getProxy()+"\" cannot be enabled, because online mode is enabled!");
+                    logger.warn("Proxy // Defaulting to offline authentication!");
                     Main.server = MinecraftServer.init(new Auth.Offline());
                     success = true;
                     break;
                 }
                 try {
                     Main.server = MinecraftServer.init(new Auth.Velocity(config.proxy.getSecret()));
-                    logger.log("Proxy", "Velocity support enabled!");
+                    logger.info("Proxy // Velocity support enabled!");
                     success = true;
                 } catch (IllegalArgumentException e) {
-                    logger.error("Proxy", "Velocity support not enabled, invalid secret given!");
+                    logger.error("Proxy // Velocity support not enabled, invalid secret given!");
                 }
 
                 break;
             case "bungee":
             case "bungeecord":
                 Main.server = MinecraftServer.init(new Auth.Bungee());
-                logger.log("Proxy", "Bungeecord support enabled!");
+                logger.info("Proxy // Bungeecord support enabled!");
                 success = true;
                 break;
             default:
@@ -101,7 +102,7 @@ public class Main {
 
             Runtime.getRuntime().addShutdownHook(new Thread(MinecraftServer::stopCleanly));
         } else {
-            logger.error("Main", "Server failed to setup initialisation, stopping execution!");
+            logger.error("Main // Server failed to setup initialisation, stopping execution!");
         }
     }
 }

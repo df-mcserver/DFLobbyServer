@@ -26,7 +26,7 @@ public class Entities {
                     )
             );
 
-            Main.logger.log("Servers", "Added NPC \""+server.getDisplayName()+"\" for server \""+server.getServerName()+"\" at position "+server.getPosition()+"!");
+            Main.logger.info("Servers // Added NPC \"{}\" for server \"{}\" at position {}!", server.getDisplayName(), server.getServerName(), server.getPosition());
         }
     }
 }

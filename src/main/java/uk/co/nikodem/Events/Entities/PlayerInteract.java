@@ -43,6 +43,6 @@ public class PlayerInteract implements EventHandler {
 
         PlayerSender.sendPlayer(plr, aliveNPC.serverInformation.getServerName(), aliveNPC.serverInformation.isUnrestricted());
 
-        Main.logger.log("Entities", plr.getUsername()+" interacted with NPC for \""+aliveNPC.serverInformation.getServerName()+"\"!");
+        Main.logger.info("Entities // {} interacted with NPC for {}!", plr.getUsername(), aliveNPC.serverInformation.getServerName());
     }
 }

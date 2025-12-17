@@ -111,9 +111,9 @@ public class Initialiser {
         try {
             Main.server.start(addr, port);
 
-            logger.log("Main","DFLobbyServer started on "+addr+":"+port+"!");
+            logger.info("Main // DFLobbyServer started on {}:{}!", addr, port);
         } catch (Exception e) {
-            logger.error("Main", "Failed to start DFLobbyServer on "+addr+":"+port+"!");
+            logger.error("Main // Failed to start DFLobbyServer on {}:{}!", addr, port);
         }
     }
 

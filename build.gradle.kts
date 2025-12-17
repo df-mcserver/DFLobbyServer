@@ -19,6 +19,7 @@ dependencies {
     implementation("com.moandjiezana.toml:toml4j:0.7.2")
     implementation("com.github.TogAr2:MinestomPvP:56a831b41c")
     implementation("net.kyori:adventure-text-minimessage:4.24.0")
+    implementation("org.slf4j:slf4j-simple:2.0.17")
 }
 
 java {

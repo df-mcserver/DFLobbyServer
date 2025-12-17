@@ -32,7 +32,7 @@ public class PlayerDisconnecting implements EventHandler {
             PlayerCombat.playerLeave(player);
             EditMode.removePlayer(player);
 
-            Main.logger.log("Players", msg);
+            Main.logger.info("Players // {}", msg);
         });
     }
 }

@@ -24,7 +24,7 @@ public class ServerPing implements EventHandler {
             try (InputStream stream = new FileInputStream(Path.of(Main.config.ping.getFaviconPath()).toFile())) {
                 favicon = Objects.requireNonNull(stream).readAllBytes();
             } catch (IOException | NullPointerException e) {
-                Main.logger.warn("Favicon", "Favicon path given, but not found!");
+                Main.logger.warn("Favicon // Favicon path given, but not found!");
                 e.printStackTrace();
             }
         } else {
