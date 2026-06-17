@@ -18,13 +18,15 @@ public class ServerPing implements EventHandler {
 
     @Override
     public void setup(GlobalEventHandler eventHandler) {
-        byte[] favicon = new byte[0];
+        byte[] favicon;
 
         if (Main.config.ping.getFaviconPath() != null) {
             try (InputStream stream = new FileInputStream(Path.of(Main.config.ping.getFaviconPath()).toFile())) {
                 favicon = Objects.requireNonNull(stream).readAllBytes();
+                Main.logger.info("Favicon // Favicon loaded!");
             } catch (IOException | NullPointerException e) {
                 Main.logger.warn("Favicon // Favicon path given, but not found!");
+                favicon = null;
                 e.printStackTrace();
             }
         } else {
@@ -37,9 +39,10 @@ public class ServerPing implements EventHandler {
 
             event.setStatus(
                     Status.builder()
-                            .description(MiniMessage.miniMessage().deserialize(Main.config.ping.getMotd()))
                             .favicon(finalFavicon)
+                            .description(MiniMessage.miniMessage().deserialize(Main.config.ping.getMotd()))
                             .playerInfo(onlinePlayers, Main.config.ping.getFakeMaxPlayers())
+                            .enforcesSecureChat(false)
                             .build()
             );
         });

@@ -1,6 +1,5 @@
 # DFLobbyServer
-A minimal lobby server written with [Minestom (1.21.8, 2025.10.05)](https://github.com/Minestom/Minestom/tree/2025.10.05-1.21.8)
-
+A minimal lobby server written with [Minestom (2026.06.05-26.1.2)](https://github.com/Minestom/Minestom/tree/2026.06.05-26.1.2) and [Minestom PVP](https://github.com/TogAr2/MinestomPvP)
 > [!WARNING]
 > NOT INTENDED FOR PERSONAL USE  
 > This server is built for a very specific use case, and you may need to modify the source code in order to make this server work for you.  

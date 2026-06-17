@@ -12,19 +12,17 @@ repositories {
 }
 
 dependencies {
-//    testImplementation(platform("org.junit:junit-bom:5.10.0"))
-//    testImplementation("org.junit.jupiter:junit-jupiter")
-//    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-    implementation("net.minestom:minestom:2025.10.05-1.21.8")
+    implementation("net.minestom:minestom:2026.06.05-26.1.2")
     implementation("com.moandjiezana.toml:toml4j:0.7.2")
-    implementation("com.github.TogAr2:MinestomPvP:56a831b41c")
+    implementation("io.github.togar2:MinestomPvP:2026.05.30-26.1.1")
     implementation("net.kyori:adventure-text-minimessage:4.24.0")
-    implementation("org.slf4j:slf4j-simple:2.0.17")
+    implementation("org.slf4j:slf4j-simple:2.0.18")
+    implementation("net.kyori:option:1.1.0")
 }
 
 java {
     toolchain {
-        languageVersion.set(JavaLanguageVersion.of(21)) // Minestom has a minimum Java version of 21
+        languageVersion.set(JavaLanguageVersion.of(25)) // Minestom 26.1 has a minimum Java version of 25
     }
 }
 

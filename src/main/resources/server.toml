@@ -12,6 +12,7 @@ minimum_version_name = ""
 online = true
 
 [ping]
+# make sure that if you're behind a proxy, that your proxy passes through the ping, otherwise this has no effect
 motd = "<green>DFLobbyServer"
 fake_max_players = -1
 favicon_path = "icon.png"
